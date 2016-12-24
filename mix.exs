@@ -2,7 +2,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :membrane_caps_audio_opus,
+    [app: :membrane_caps_audio_raw,
      compilers: Mix.compilers,
      version: "0.0.1",
      elixir: "~> 1.3",
@@ -11,7 +11,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
      maintainers: ["Marcin Lewandowski"],
      licenses: ["LGPL"],
      name: "Membrane Caps: Audio.Raw",
-     source_url: "https://bitbucket.org/radiokit/membrane-caps-audio-opus",
+     source_url: "https://bitbucket.org/radiokit/membrane-caps-audio-raw",
      preferred_cli_env: [espec: :test],
      deps: deps]
   end
