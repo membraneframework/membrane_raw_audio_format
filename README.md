@@ -1,6 +1,6 @@
 # Membrane Multimedia Framework: Audio.Raw Caps
 
-This package provides definition of caps for Raw-encoded audio.
+This package provides definition of caps for raw audio.
 
 # Installation
 
