@@ -176,7 +176,7 @@ defmodule Membrane.Caps.Audio.Raw do
 
 
   @doc """
-  Similar to `sample_to_value/1` but returns just plain value.
+  Similar to `sample_to_value/2` but returns just plain value.
 
   Inlined by the compiler.
   """
