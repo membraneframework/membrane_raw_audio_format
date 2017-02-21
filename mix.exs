@@ -9,7 +9,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
      maintainers: ["Marcin Lewandowski"],
      licenses: ["LGPL"],
      name: "Membrane Caps: Audio.Raw",
-     source_url: "https://bitbucket.org/radiokit/membrane-caps-audio-raw",
+     source_url: "https://github.com/membraneframework/membrane-caps-audio-raw",
      preferred_cli_env: [espec: :test],
      deps: deps()]
   end
