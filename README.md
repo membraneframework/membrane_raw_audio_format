@@ -1,15 +1,29 @@
-# Membrane Multimedia Framework: Audio.Raw Caps
+# Membrane Multimedia Framework: raw audio format definition
 
-This package provides definition of caps for raw audio.
+This package provides raw audio format definition (so-called caps) for the
+Membrane Multimedia Framework.
+
+Beyond general data structures it contains some useful helper functions for
+manipulating raw audio samples.
 
 # Installation
 
-Add the following line to your `deps` in `mix.exs`.  Run `mix deps.get`.
+Unless you're developing an Membrane Element it's unlikely that you need to
+use this package directly in your app, as normally it is going to be fetched as
+a dependency of any element that operates on raw audio.
+
+However, if you are developing an Element or need to add it due to any other
+reason, just add the following line to your `deps` in the `mix.exs` and run
+`mix deps.get`.
 
 ```elixir
-{:membrane_caps_audio_raw, git: "git@bitbucket.org:radiokit/membrane-caps-audio-raw.git"}
+{:membrane_caps_audio_raw, git: "git@github.com:membraneframework/membrane-caps-audio-raw.git"}
 ```
 
 # Authors
 
-Marcin Lewandowski
+* Marcin Lewandowski ([@mspanc](https://twitter.com/mspanc))
+
+# License
+
+MIT
