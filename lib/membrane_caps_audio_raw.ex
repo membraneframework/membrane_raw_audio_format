@@ -9,8 +9,16 @@ defmodule Membrane.Caps.Audio.Raw do
     format_to_sample_size!: 1,
     sample_to_value: 2,
     sample_to_value!: 2,
+    value_to_sample: 2,
+    value_to_sample!: 2,
+    value_to_sample_check_overflow: 2,
     sample_min: 1,
     sample_max: 1,
+    is_signed: 1,
+    is_unsigned: 1,
+    is_int_format: 1,
+    is_float_format: 1,
+    sound_of_silence: 1,
   ]}
 
 
@@ -81,6 +89,68 @@ defmodule Membrane.Caps.Audio.Raw do
     value
   end
 
+  @doc """
+  Returns one 'silent' sample in given format, that is value of zero in this
+  format.
+
+  Inlined by the compiler.
+  """
+  @spec sound_of_silence(format_t) :: binary
+  def sound_of_silence(:s8), do: <<0>>
+  def sound_of_silence(:u8), do: <<128>>
+  def sound_of_silence(:s16le), do: <<0, 0>>
+  def sound_of_silence(:s16be), do: <<0, 0>>
+  def sound_of_silence(:u16le), do: <<0, 128>>
+  def sound_of_silence(:u16be), do: <<128, 0>>
+  def sound_of_silence(:s32le), do: <<0, 0, 0, 0>>
+  def sound_of_silence(:s32be), do: <<0, 0, 0, 0>>
+  def sound_of_silence(:u32le), do: <<0, 0, 0, 128>>
+  def sound_of_silence(:u32be), do: <<128, 0, 0, 0>>
+  def sound_of_silence(:f32le), do: <<0, 0, 0, 0>>
+  def sound_of_silence(:f32be), do: <<0, 0, 0, 0>>
+
+  @doc """
+  Determines if format is floating point.
+
+  Inlined by the compiler.
+  """
+  @spec is_float_format(format_t) :: boolean
+  def is_float_format(:f32le), do: true
+  def is_float_format(:f32be), do: true
+  def is_float_format(_), do: false
+
+  @doc """
+  Determines if format is integer.
+
+  Inlined by the compiler.
+  """
+  @spec is_int_format(format_t) :: boolean
+  def is_int_format(format), do: !is_float(format)
+
+  @doc """
+  Determines if format is signed.
+
+  Inlined by the compiler.
+  """
+  @spec is_signed(format_t) :: boolean
+  def is_signed(:s8), do: true
+  def is_signed(:s16le), do: true
+  def is_signed(:s16be), do: true
+  def is_signed(:s32le), do: true
+  def is_signed(:s32be), do: true
+  def is_signed(:f32le), do: true
+  def is_signed(:f32be), do: true
+  def is_signed(_), do: false
+
+
+  @doc """
+  Determines if format is unsigned.
+
+  Inlined by the compiler.
+  """
+  @spec is_unsigned(format_t) :: boolean
+  def is_unsigned(format), do: !is_signed(format)
+
 
   @doc """
   Converts one raw sample into its numeric value, interpreting it for given format.
@@ -148,6 +218,87 @@ defmodule Membrane.Caps.Audio.Raw do
     {:ok, value}
   end
 
+
+  @doc """
+  Converts value into one raw sample, encoding it in given format.
+
+  Inlined by the compiler.
+  """
+  @spec value_to_sample(bitstring, format_t) :: {:ok, binary}
+  def value_to_sample(value, :s8) do
+    {:ok, << value :: integer-unit(8)-size(1)-signed >> }
+  end
+
+  def value_to_sample(value, :u8) do
+    {:ok, << value :: integer-unit(8)-size(1)-unsigned >> }
+  end
+
+  def value_to_sample(value, :s16le) do
+    {:ok, << value :: integer-unit(8)-size(2)-little-signed >> }
+  end
+
+  def value_to_sample(value, :s32le) do
+    {:ok, << value :: integer-unit(8)-size(4)-little-signed >> }
+  end
+
+  def value_to_sample(value, :u16le) do
+    {:ok, << value :: integer-unit(8)-size(2)-little-unsigned >> }
+  end
+
+  def value_to_sample(value, :u32le) do
+    {:ok, << value :: integer-unit(8)-size(4)-little-unsigned >> }
+  end
+
+  def value_to_sample(value, :f32le) do
+    {:ok, << value :: float-unit(8)-size(4)-little >> }
+  end
+
+  def value_to_sample(value, :s16be) do
+    {:ok, << value :: integer-unit(8)-size(2)-big-signed >> }
+  end
+
+  def value_to_sample(value, :s32be) do
+    {:ok, << value :: integer-unit(8)-size(4)-big-signed >> }
+  end
+
+  def value_to_sample(value, :u16be) do
+    {:ok, << value :: integer-unit(8)-size(2)-big-unsigned >> }
+  end
+
+  def value_to_sample(value, :u32be) do
+    {:ok, << value :: integer-unit(8)-size(4)-big-unsigned >> }
+  end
+
+  def value_to_sample(value, :f32be) do
+    {:ok, << value :: float-unit(8)-size(4)-big >> }
+  end
+
+  @doc """
+  Same as value_to_sample/2, but returns just a plain binary
+
+  Inlined by the compiler.
+  """
+  @spec value_to_sample!(bitstring, format_t) :: binary
+  def value_to_sample!(value, format) do
+    {:ok, sample} = value_to_sample(value, format)
+    sample
+  end
+
+  @doc """
+  Same as value_to_sample/2, but also checks for overflow.
+  Returns {:error, :overflow} if overflow happens.
+
+  Inlined by the compiler.
+  """
+  @spec value_to_sample_check_overflow(bitstring, format_t)
+    :: {:ok, binary} | {:error, :overflow}
+  def value_to_sample_check_overflow(value, format) do
+    if sample_min(format) <= value and sample_max(format) >= value do
+      value_to_sample(value, format)
+    else
+      {:error, :overflow}
+    end
+  end
 
   @doc """
   Returns minimum sample value for given format.
