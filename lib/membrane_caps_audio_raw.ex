@@ -35,6 +35,7 @@ defmodule Membrane.Caps.Audio.Raw do
     :s8 |
     :u8 |
     :s16le |
+    :s24le |
     :s32le |
     :u16le |
     :u32le |
@@ -67,6 +68,7 @@ defmodule Membrane.Caps.Audio.Raw do
   def format_to_sample_size(:s8), do: {:ok, 1}
   def format_to_sample_size(:u8), do: {:ok, 1}
   def format_to_sample_size(:s16le), do: {:ok, 2}
+  def format_to_sample_size(:s24le), do: {:ok, 3}
   def format_to_sample_size(:s32le), do: {:ok, 4}
   def format_to_sample_size(:u16le), do: {:ok, 2}
   def format_to_sample_size(:u32le), do: {:ok, 4}
@@ -102,6 +104,7 @@ defmodule Membrane.Caps.Audio.Raw do
   def sound_of_silence(:s16be), do: <<0, 0>>
   def sound_of_silence(:u16le), do: <<0, 128>>
   def sound_of_silence(:u16be), do: <<128, 0>>
+  def sound_of_silence(:s24le), do: <<0, 0, 0>>
   def sound_of_silence(:s32le), do: <<0, 0, 0, 0>>
   def sound_of_silence(:s32be), do: <<0, 0, 0, 0>>
   def sound_of_silence(:u32le), do: <<0, 0, 0, 128>>
@@ -135,6 +138,7 @@ defmodule Membrane.Caps.Audio.Raw do
   @spec is_signed(format_t) :: boolean
   def is_signed(:s8), do: true
   def is_signed(:s16le), do: true
+  def is_signed(:s24le), do: true
   def is_signed(:s16be), do: true
   def is_signed(:s32le), do: true
   def is_signed(:s32be), do: true
@@ -170,6 +174,11 @@ defmodule Membrane.Caps.Audio.Raw do
 
   def sample_to_value(sample, :s16le) do
     << value :: integer-unit(8)-size(2)-little-signed >> = sample
+    {:ok, value}
+  end
+
+  def sample_to_value(sample, :s24le) do
+    << value :: integer-unit(8)-size(3)-little-signed >> = sample
     {:ok, value}
   end
 
@@ -235,6 +244,10 @@ defmodule Membrane.Caps.Audio.Raw do
 
   def value_to_sample(value, :s16le) do
     {:ok, << value :: integer-unit(8)-size(2)-little-signed >> }
+  end
+
+  def value_to_sample(value, :s24le) do
+    {:ok, << value :: integer-unit(8)-size(3)-little-signed >> }
   end
 
   def value_to_sample(value, :s32le) do
@@ -309,6 +322,7 @@ defmodule Membrane.Caps.Audio.Raw do
   def sample_min(:s8), do: -128
   def sample_min(:u8), do: 0
   def sample_min(:s16le), do: -32768
+  def sample_min(:s24le), do: -8388608
   def sample_min(:s32le), do: -2147483648
   def sample_min(:u16le), do: 0
   def sample_min(:u32le), do: 0
@@ -329,6 +343,7 @@ defmodule Membrane.Caps.Audio.Raw do
   def sample_max(:s8), do: 127
   def sample_max(:u8), do: 255
   def sample_max(:s16le), do: 32767
+  def sample_max(:s24le), do: 8388607
   def sample_max(:s32le), do: 2147483647
   def sample_max(:u16le), do: 65535
   def sample_max(:u32le), do: 4294967295
