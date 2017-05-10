@@ -18,6 +18,8 @@ defmodule Membrane.Caps.Audio.Raw do
     is_unsigned: 1,
     is_int_format: 1,
     is_float_format: 1,
+    is_little_endian: 1,
+    is_big_endian: 1,
     sound_of_silence: 1,
   ]}
 
@@ -126,6 +128,34 @@ defmodule Membrane.Caps.Audio.Raw do
   """
   @spec is_int_format(format_t) :: boolean
   def is_int_format(format), do: !is_float(format)
+
+
+  @doc """
+  Determines if format is little endian.
+
+  Inlined by the compiler.
+  """
+  @spec is_little_endian(format_t) :: boolean
+  def is_little_endian(:u8), do: true
+  def is_little_endian(:s8), do: true
+  def is_little_endian(:u16le), do: true
+  def is_little_endian(:s16le), do: true
+  def is_little_endian(:u24le), do: true
+  def is_little_endian(:s24le), do: true
+  def is_little_endian(:u32le), do: true
+  def is_little_endian(:s32le), do: true
+  def is_little_endian(:f32le), do: true
+  def is_little_endian(_), do: false
+
+  @doc """
+  Determines if format is big endian.
+
+  Inlined by the compiler.
+  """
+  @spec is_big_endian(format_t) :: boolean
+  def is_big_endian(:u8), do: true
+  def is_big_endian(:s8), do: true
+  def is_big_endian(format), do: !is_little_endian(format)
 
   @doc """
   Determines if format is signed.

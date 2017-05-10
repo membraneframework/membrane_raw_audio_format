@@ -1,12 +1,13 @@
 defmodule Membrane.Caps.Audio.Raw.SerializedFormat do
   use Bitwise
-
-  @unsigned_sample_type 0b00 <<< 30
-  @signed_sample_type 0b01 <<< 30
-  @float_sample_type 0b11 <<< 30
+  alias Membrane.Caps.Audio.Raw, as: Caps
 
   @le_sample_endianity 0b0 <<< 29
   @be_sample_endianity 0b1 <<< 29
+  @unsigned_sample_type 0b0 <<< 30
+  @signed_sample_type 0b1 <<< 30
+  @int_sample_type 0b0 <<< 31
+  @float_sample_type 0b1 <<< 31
 
   @sample_size (0b1 <<< 8) - 1
 
@@ -20,24 +21,11 @@ defmodule Membrane.Caps.Audio.Raw.SerializedFormat do
   returns format encoded as integer
   """
   def from_atom(format) do
-    format \
-      |> Atom.to_string \
-      |> fn(format_str) -> Regex.split(~r/\d+/, format_str, include_captures: true) end.() \
-      |> case do
-          [type, size, endianity] -> [
-            case type do
-              "u" -> @unsigned_sample_type
-              "s" -> @signed_sample_type
-              "f" -> @float_sample_type
-            end,
-            String.to_integer(size),
-            case endianity do
-              "be" -> @be_sample_endianity
-              _ -> @le_sample_endianity
-            end
-          ]
-        end
-      |> Enum.reduce(&bor/2)
+    0
+      ||| if Caps.is_int_format format do @int_sample_type else @float_sample_type end
+      ||| if Caps.is_signed format do @signed_sample_type else @unsigned_sample_type end
+      ||| if Caps.is_little_endian format do @le_sample_endianity else @be_sample_endianity end
+      ||| 8 * Caps.format_to_sample_size! format
   end
 
   @doc """
@@ -45,7 +33,7 @@ defmodule Membrane.Caps.Audio.Raw.SerializedFormat do
   returns sample size in bytes as integer
   """
   def sample_size(serialized_format) do
-    (serialized_format &&& @sample_size) / 8 |> Float.ceil |> trunc
+    (serialized_format &&& @sample_size) |> div(8)
   end
 
 end
