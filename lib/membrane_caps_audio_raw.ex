@@ -127,7 +127,7 @@ defmodule Membrane.Caps.Audio.Raw do
   Inlined by the compiler.
   """
   @spec is_int_format(format_t) :: boolean
-  def is_int_format(format), do: !is_float(format)
+  def is_int_format(format), do: !is_float_format(format)
 
 
   @doc """
