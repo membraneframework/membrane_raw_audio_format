@@ -20,6 +20,8 @@ defmodule Membrane.Caps.Audio.Raw.SerializedFormat do
   @le_sample_endianity 0b0 <<< 29
   @be_sample_endianity 0b1 <<< 29
 
+  @sample_type 0b11 <<< 30
+  @sample_endianity 0b1 <<< 29
   @sample_size (0b1 <<< 8) - 1
 
   @doc """
@@ -57,21 +59,22 @@ defmodule Membrane.Caps.Audio.Raw.SerializedFormat do
   """
   @spec to_atom(pos_integer) :: Caps.format_t
   def to_atom(serialized_format) do
-    format_str = case serialized_format do
-      a when a |> band(@float_sample_type) != 0 -> "f"
-      a when a |> band(@signed_sample_type) != 0 -> "s"
-      _ -> "u"
+    format_str = case serialized_format &&& @sample_type do
+      @float_sample_type ||| @signed_sample_type -> "f"
+      @int_sample_type ||| @signed_sample_type -> "s"
+      @int_sample_type ||| @unsigned_sample_type -> "u"
     end
 
-    size_str = (sample_size(serialized_format) * 8 |> Integer.to_string)
+    size_str = (serialized_format &&& @sample_size) |> Integer.to_string
 
-    endianity_str = case {sample_size(serialized_format), serialized_format} do
-      {1, _} -> ""
-      {_, endianity} when endianity |> band(@be_sample_endianity) != 0 -> "be"
-      _ -> "le"
+    skip_endianity = serialized_format |> sample_size == 1
+    endianity_str = case serialized_format &&& @sample_endianity do
+      _ when skip_endianity -> ""
+      @le_sample_endianity -> "le"
+      @be_sample_endianity -> "be"
     end
 
-    format_str <> size_str <> endianity_str |> String.to_atom
+    (format_str <> size_str <> endianity_str) |> String.to_atom
   end
 
 
