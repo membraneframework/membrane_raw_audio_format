@@ -59,10 +59,11 @@ defmodule Membrane.Caps.Audio.Raw.SerializedFormat do
   """
   @spec to_atom(pos_integer) :: Caps.format_t
   def to_atom(serialized_format) do
-    format_str = case serialized_format &&& @sample_type do
-      @float_sample_type ||| @signed_sample_type -> "f"
-      @int_sample_type ||| @signed_sample_type -> "s"
-      @int_sample_type ||| @unsigned_sample_type -> "u"
+    type = serialized_format &&& @sample_type
+    format_str = cond do
+      (@float_sample_type ||| @signed_sample_type) == type  -> "f"
+      (@int_sample_type ||| @signed_sample_type) == type -> "s"
+      (@int_sample_type ||| @unsigned_sample_type) == type -> "u"
     end
 
     size_str = (serialized_format &&& @sample_size) |> Integer.to_string
