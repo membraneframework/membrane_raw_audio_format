@@ -1,5 +1,7 @@
 defmodule Membrane.Caps.Audio.Raw do
   alias __MODULE__.Format
+  alias Membrane.Time
+
   @moduledoc """
   This module implements struct for caps representing raw audio stream with
   interleaved channels.
@@ -20,6 +22,12 @@ defmodule Membrane.Caps.Audio.Raw do
     sample_min: 1,
     sample_max: 1,
     sound_of_silence: 1,
+    frames_to_bytes: 2,
+    bytes_to_frames: 3,
+    frames_to_time: 3,
+    time_to_frames: 3,
+    bytes_to_time: 3,
+    time_to_bytes: 3,
 
     format_to_sample_size: 1,
     format_to_sample_size!: 1,
@@ -275,6 +283,73 @@ defmodule Membrane.Caps.Audio.Raw do
         <<128, 0::integer-size(size)>>
     end
   end
+
+  @doc """
+  Converts frames to bytes in given caps.
+
+  Inlined by the compiler.
+  """
+  @spec frames_to_bytes(non_neg_integer, t) :: non_neg_integer
+  def frames_to_bytes(frames, %__MODULE__{} = caps) when frames >= 0 do
+    frames * frame_size(caps)
+  end
+
+  @doc """
+  Converts bytes to frames in given caps.
+
+  Inlined by the compiler.
+  """
+  @spec bytes_to_frames(non_neg_integer, t) :: non_neg_integer
+  def bytes_to_frames(bytes, %__MODULE__{} = caps, round_f \\ &trunc/1) when bytes >= 0 do
+    (bytes / frame_size(caps)) |> round_f.()
+  end
+
+  @doc """
+  Converts time in Membrane.Time units to frames in given caps.
+
+  Inlined by the compiler.
+  """
+  @spec time_to_frames(Time.non_neg_t, t, (float -> integer)) :: non_neg_integer
+  def time_to_frames(time, %__MODULE__{} = caps, round_f \\ & &1 |> :math.ceil |> trunc)
+  when time >= 0 do
+    (time * caps.sample_rate / (1 |> Time.second)) |> round_f.()
+  end
+
+  @doc """
+  Converts frames to time in Membrane.Time units in given caps.
+
+  Inlined by the compiler.
+  """
+  @spec frames_to_time(non_neg_integer, t, (float -> integer)) :: Time.non_neg_t
+  def frames_to_time(frames, %__MODULE__{} = caps, round_f \\ &trunc/1)
+  when frames >= 0 do
+    (frames * (1 |> Time.second) / caps.sample_rate) |> round_f.()
+  end
+
+  @doc """
+  Converts time in Membrane.Time units to bytes in given caps.
+
+  Inlined by the compiler.
+  """
+  @spec time_to_bytes(Time.non_neg_t, t, (float -> integer)) :: non_neg_integer
+  def time_to_bytes(time, %__MODULE__{} = caps, round_f \\ & &1 |> :math.ceil |> trunc)
+  when time >= 0 do
+    time_to_frames(time, caps, round_f) |> frames_to_bytes(caps)
+  end
+
+  @doc """
+  Converts bytes to time in Membrane.Time units in given caps.
+
+  Inlined by the compiler.
+  """
+  @spec bytes_to_time(non_neg_integer, t, (float -> integer)) :: Time.non_neg_t
+  def bytes_to_time(bytes, %__MODULE__{} = caps, round_f \\ &trunc/1)
+  when bytes >= 0 do
+    frames_to_time(bytes |> bytes_to_frames(caps), caps, round_f)
+  end
+
+
+
 
   @doc """
   Returns how many bytes are needed to store single frame of given format.
