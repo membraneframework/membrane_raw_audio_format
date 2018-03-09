@@ -1,27 +1,37 @@
 defmodule Membrane.Caps.Audio.Raw.Format do
   use Bitwise
+  import Membrane.Helper.Typespec
+
   @compile {:inline, [
       to_tuple: 1,
       from_tuple: 1,
     ]}
 
-  @type t ::
-    :s8 |
-    :u8 |
-    :s16le |
-    :u16le |
-    :s16be |
-    :u16be |
-    :s24le |
-    :u24le |
-    :s24be |
-    :u24be |
-    :s32le |
-    :u32le |
-    :s32be |
-    :u32be |
-    :f32le |
-    :f32be
+
+  @formats [
+    :s8,
+    :u8,
+    :s16le,
+    :u16le,
+    :s16be,
+    :u16be,
+    :s24le,
+    :u24le,
+    :s24be,
+    :u24be,
+    :s32le,
+    :u32le,
+    :s32be,
+    :u32be,
+    :f32le,
+    :f32be,
+  ]
+
+  def values, do: @formats
+
+  def_type_from_list t :: @formats
+
+
 
   @type sample_type_t :: :s | :u | :f
   @type sample_size_t :: 8 | 16 | 24 | 32
