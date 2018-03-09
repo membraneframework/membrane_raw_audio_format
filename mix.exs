@@ -17,8 +17,10 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
 
   defp deps do
     [
-      {:espec, "~> 1.1.2", only: :test},
+      {:espec, "~> 1.5.0", only: :test},
       {:ex_doc, "~> 0.14", only: :dev},
+      {:bimap, "~> 0.1"},
+      {:membrane_core, git: "git@github.com:membraneframework/membrane-core.git"},
     ]
   end
 end
