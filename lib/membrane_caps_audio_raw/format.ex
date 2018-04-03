@@ -2,11 +2,11 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   use Bitwise
   import Membrane.Helper.Typespec
 
-  @compile {:inline, [
-      to_tuple: 1,
-      from_tuple: 1,
-    ]}
-
+  @compile {:inline,
+            [
+              to_tuple: 1,
+              from_tuple: 1
+            ]}
 
   @formats [
     :s8,
@@ -24,14 +24,12 @@ defmodule Membrane.Caps.Audio.Raw.Format do
     :s32be,
     :u32be,
     :f32le,
-    :f32be,
+    :f32be
   ]
 
   def values, do: @formats
 
   def_type_from_list t :: @formats
-
-
 
   @type sample_type_t :: :s | :u | :f
   @type sample_size_t :: 8 | 16 | 24 | 32
@@ -73,16 +71,14 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   def from_tuple({:f, 32, :le}), do: :f32le
   def from_tuple({:f, 32, :be}), do: :f32be
 
+  # Serialization constants
 
-  #Serialization constants
-
-  @sample_types BiMap.new s: 0b01 <<< 30, u: 0b00 <<< 30, f: 0b11 <<< 30
-  @sample_endiannesses BiMap.new le: 0b0 <<< 29, be: 0b1 <<< 29
+  @sample_types BiMap.new(s: 0b01 <<< 30, u: 0b00 <<< 30, f: 0b11 <<< 30)
+  @sample_endiannesses BiMap.new(le: 0b0 <<< 29, be: 0b1 <<< 29)
 
   @sample_type 0b11 <<< 30
   @sample_endianness 0b1 <<< 29
   @sample_size (0b1 <<< 8) - 1
-
 
   @doc """
   converts audio format to 32-bit unsigned integer consisting of (from oldest bit):
@@ -101,12 +97,10 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   @spec serialize(t) :: pos_integer
   def serialize(format) do
     {type, size, endianness} = format |> to_tuple
-    0
-      ||| @sample_types[type]
-      ||| (@sample_endiannesses[endianness] || @sample_endiannesses[:le])
-      ||| size
-  end
 
+    0 ||| @sample_types[type] ||| (@sample_endiannesses[endianness] || @sample_endiannesses[:le]) |||
+      size
+  end
 
   @doc """
   Converts positive integer containing serialized format to atom.
@@ -121,11 +115,13 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   def deserialize(serialized_format) do
     type = @sample_types |> BiMap.get_key(serialized_format &&& @sample_type)
     size = serialized_format &&& @sample_size
-    endianness = case size do
+
+    endianness =
+      case size do
         8 -> :any
         _ -> @sample_endiannesses |> BiMap.get_key(serialized_format &&& @sample_endianness)
       end
+
     {type, size, endianness} |> from_tuple
   end
-
 end
