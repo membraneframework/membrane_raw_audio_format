@@ -159,8 +159,12 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec sample_to_value(bitstring, t) :: integer | float
+  @spec sample_to_value(bitstring, t | Format.t) :: number
   def sample_to_value(sample, %__MODULE__{format: format}) do
+    sample_to_value(sample, format)
+  end
+
+  def sample_to_value(sample, format) when is_atom(format) do
     case Format.to_tuple(format) do
       {:s, size, endianness} when endianness in [:le, :any] ->
         <<value::integer-size(size)-little-signed>> = sample
@@ -193,8 +197,12 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec value_to_sample(bitstring, t) :: binary
+  @spec value_to_sample(number, t | Format.t) :: binary
   def value_to_sample(value, %__MODULE__{format: format}) do
+    value_to_sample(value, format)
+  end
+
+  def value_to_sample(value, format) when is_atom(format) do
     case Format.to_tuple(format) do
       {:s, size, endianness} when endianness in [:le, :any] ->
         <<value::integer-size(size)-little-signed>>
@@ -222,10 +230,10 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec value_to_sample_check_overflow(bitstring, t) :: {:ok, binary} | {:error, :overflow}
-  def value_to_sample_check_overflow(value, %__MODULE__{format: format}) do
-    if sample_min(format) <= value and sample_max(format) >= value do
-      {:ok, value_to_sample(value, format)}
+  @spec value_to_sample_check_overflow(number, t) :: {:ok, binary} | {:error, :overflow}
+  def value_to_sample_check_overflow(value, caps) do
+    if sample_min(caps) <= value and sample_max(caps) >= value do
+      {:ok, value_to_sample(value, caps)}
     else
       {:error, :overflow}
     end
@@ -236,7 +244,7 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec sample_min(t) :: integer | float
+  @spec sample_min(t) :: number
   def sample_min(%__MODULE__{format: format}) do
     use Bitwise
 
@@ -252,7 +260,7 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec sample_max(t) :: integer | float
+  @spec sample_max(t) :: number
   def sample_max(%__MODULE__{format: format}) do
     use Bitwise
 
@@ -389,7 +397,7 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec value_to_sample!(bitstring, Format.t()) :: binary
+  @spec value_to_sample!(number, Format.t()) :: binary
   @deprecated "Use value_to_sample/2 instead, mind the new typespec"
   def value_to_sample!(value, format) do
     value_to_sample(value, format)
@@ -400,7 +408,7 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec sample_to_value!(bitstring, Format.t()) :: integer | float
+  @spec sample_to_value!(bitstring, Format.t()) :: number
   @deprecated "Use sample_to_value/2 instead, mind the new typespec"
   def sample_to_value!(sample, format) do
     sample_to_value(sample, format)

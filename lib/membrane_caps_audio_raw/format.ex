@@ -33,7 +33,7 @@ defmodule Membrane.Caps.Audio.Raw.Format do
 
   @type sample_type_t :: :s | :u | :f
   @type sample_size_t :: 8 | 16 | 24 | 32
-  @type endianness_t :: :le | :be
+  @type endianness_t :: :le | :be | :any
 
   @spec to_tuple(t) :: {sample_type_t, sample_size_t, endianness_t}
   def to_tuple(:s8), do: {:s, 8, :any}
