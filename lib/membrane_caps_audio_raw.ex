@@ -159,7 +159,7 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec sample_to_value(bitstring, t | Format.t) :: number
+  @spec sample_to_value(bitstring, t | Format.t()) :: number
   def sample_to_value(sample, %__MODULE__{format: format}) do
     sample_to_value(sample, format)
   end
@@ -197,7 +197,7 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec value_to_sample(number, t | Format.t) :: binary
+  @spec value_to_sample(number, t | Format.t()) :: binary
   def value_to_sample(value, %__MODULE__{format: format}) do
     value_to_sample(value, format)
   end

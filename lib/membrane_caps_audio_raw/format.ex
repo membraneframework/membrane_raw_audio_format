@@ -91,8 +91,6 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   expects atom format
 
   returns format encoded as integer
-
-  inlined by compiler
   """
   @spec serialize(t) :: pos_integer
   def serialize(format) do
@@ -108,8 +106,6 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   expects serialized format
 
   returns Format.t
-
-  inlined by compiler
   """
   @spec deserialize(pos_integer) :: t
   def deserialize(serialized_format) do
