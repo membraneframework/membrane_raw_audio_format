@@ -253,85 +253,84 @@ defmodule Membrane.Caps.Audio.RawSpec do
   describe ".value_to_sample/2" do
     let :value, do: 42
 
-    def v2s_example(format, result) do
-      expect(described_module().value_to_sample(value(), format)) |> to(eq result)
+    let :expect_result, do: fn format, result ->
       expect(described_module().value_to_sample(value(), format_to_caps(format))) |> to(eq result)
     end
 
     it "should properly encode 42 as sample in different formats" do
-      v2s_example(:s8, <<value()>>)
-      v2s_example(:u8, <<value()>>)
+      expect_result().(:s8, <<value()>>)
+      expect_result().(:u8, <<value()>>)
 
-      v2s_example(:s16le, <<value(), 0>>)
-      v2s_example(:s16le, <<value(), 0>>)
-      v2s_example(:u16be, <<0, value()>>)
-      v2s_example(:u16be, <<0, value()>>)
+      expect_result().(:s16le, <<value(), 0>>)
+      expect_result().(:s16le, <<value(), 0>>)
+      expect_result().(:u16be, <<0, value()>>)
+      expect_result().(:u16be, <<0, value()>>)
 
-      v2s_example(:s24le, <<value(), 0, 0>>)
-      v2s_example(:s24be, <<0, 0, value()>>)
-      v2s_example(:u24le, <<value(), 0, 0>>)
-      v2s_example(:u24be, <<0, 0, value()>>)
+      expect_result().(:s24le, <<value(), 0, 0>>)
+      expect_result().(:s24be, <<0, 0, value()>>)
+      expect_result().(:u24le, <<value(), 0, 0>>)
+      expect_result().(:u24be, <<0, 0, value()>>)
 
-      v2s_example(:s32le, <<value(), 0, 0, 0>>)
-      v2s_example(:s32be, <<0, 0, 0, value()>>)
-      v2s_example(:u32le, <<value(), 0, 0, 0>>)
-      v2s_example(:u32be, <<0, 0, 0, value()>>)
+      expect_result().(:s32le, <<value(), 0, 0, 0>>)
+      expect_result().(:s32be, <<0, 0, 0, value()>>)
+      expect_result().(:u32le, <<value(), 0, 0, 0>>)
+      expect_result().(:u32be, <<0, 0, 0, value()>>)
     end
   end
 
   describe ".value_to_sample_check_overflow/2" do
     let :value, do: 42
 
-    def v2sco_example(value, format, result) do
-      expect(described_module().value_to_sample_check_overflow(value, format_to_caps(format)))
+    let :expect_result, do: fn format, result ->
+      expect(described_module().value_to_sample_check_overflow(value(), format_to_caps(format)))
       |> to(eq result)
     end
 
-    def v2sco_example(format, result) do
-      v2sco_example(value(), format, result)
+    let :expect_error, do: fn value, format ->
+      expect(described_module().value_to_sample_check_overflow(value, format_to_caps(format)))
+      |> to(eq {:error, :overflow})
     end
 
     it "should properly encode 42 as sample in different formats" do
-      v2sco_example(:s8, {:ok, <<value()>>})
-      v2sco_example(:u8, {:ok, <<value()>>})
+      expect_result().(:s8, {:ok, <<value()>>})
+      expect_result().(:u8, {:ok, <<value()>>})
 
-      v2sco_example(:s16le, {:ok, <<value(), 0>>})
-      v2sco_example(:s16le, {:ok, <<value(), 0>>})
-      v2sco_example(:u16be, {:ok, <<0, value()>>})
-      v2sco_example(:u16be, {:ok, <<0, value()>>})
+      expect_result().(:s16le, {:ok, <<value(), 0>>})
+      expect_result().(:s16le, {:ok, <<value(), 0>>})
+      expect_result().(:u16be, {:ok, <<0, value()>>})
+      expect_result().(:u16be, {:ok, <<0, value()>>})
 
-      v2sco_example(:s24le, {:ok, <<value(), 0, 0>>})
-      v2sco_example(:s24be, {:ok, <<0, 0, value()>>})
-      v2sco_example(:u24le, {:ok, <<value(), 0, 0>>})
-      v2sco_example(:u24be, {:ok, <<0, 0, value()>>})
+      expect_result().(:s24le, {:ok, <<value(), 0, 0>>})
+      expect_result().(:s24be, {:ok, <<0, 0, value()>>})
+      expect_result().(:u24le, {:ok, <<value(), 0, 0>>})
+      expect_result().(:u24be, {:ok, <<0, 0, value()>>})
 
-      v2sco_example(:s32le, {:ok, <<value(), 0, 0, 0>>})
-      v2sco_example(:s32be, {:ok, <<0, 0, 0, value()>>})
-      v2sco_example(:u32le, {:ok, <<value(), 0, 0, 0>>})
-      v2sco_example(:u32be, {:ok, <<0, 0, 0, value()>>})
+      expect_result().(:s32le, {:ok, <<value(), 0, 0, 0>>})
+      expect_result().(:s32be, {:ok, <<0, 0, 0, value()>>})
+      expect_result().(:u32le, {:ok, <<value(), 0, 0, 0>>})
+      expect_result().(:u32be, {:ok, <<0, 0, 0, value()>>})
     end
 
     it "should return error when value is not in valid range" do
-      error = {:error, :overflow}
-      v2sco_example(257, :u8, error)
-      v2sco_example(-1, :u8, error)
-      v2sco_example(129, :s8, error)
-      v2sco_example(-129, :s8, error)
+      expect_error().(257, :u8)
+      expect_error().(-1, :u8)
+      expect_error().(129, :s8)
+      expect_error().(-129, :s8)
 
-      v2sco_example(65536, :u16le, error)
-      v2sco_example(-1, :u16le, error)
-      v2sco_example(32768, :s16le, error)
-      v2sco_example(-32769, :s16le, error)
+      expect_error().(65536, :u16le)
+      expect_error().(-1, :u16le)
+      expect_error().(32768, :s16le)
+      expect_error().(-32769, :s16le)
 
-      v2sco_example(:math.pow(2, 23), :s24le, error)
-      v2sco_example(-(:math.pow(2, 23) + 1), :s24be, error)
-      v2sco_example(:math.pow(2, 24), :u24le, error)
-      v2sco_example(-1, :u24be, error)
+      expect_error().(:math.pow(2, 23), :s24le)
+      expect_error().(-(:math.pow(2, 23) + 1), :s24be)
+      expect_error().(:math.pow(2, 24), :u24le)
+      expect_error().(-1, :u24be)
 
-      v2sco_example(:math.pow(2, 31), :s32le, error)
-      v2sco_example(-(:math.pow(2, 31) + 1), :s32be, error)
-      v2sco_example(:math.pow(2, 32), :u32le, error)
-      v2sco_example(-1, :u32be, error)
+      expect_error().(:math.pow(2, 31), :s32le)
+      expect_error().(-(:math.pow(2, 31) + 1), :s32be)
+      expect_error().(:math.pow(2, 32), :u32le)
+      expect_error().(-1, :u32be)
     end
   end
 
