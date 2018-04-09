@@ -28,11 +28,7 @@ defmodule Membrane.Caps.Audio.Raw do
               frames_to_time: 3,
               time_to_frames: 3,
               bytes_to_time: 3,
-              time_to_bytes: 3,
-              format_to_sample_size: 1,
-              format_to_sample_size!: 1,
-              sample_to_value!: 2,
-              value_to_sample!: 2
+              time_to_bytes: 3
             ]}
 
   # Amount of channels inside a frame.
@@ -159,12 +155,8 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec sample_to_value(bitstring, t | Format.t()) :: number
+  @spec sample_to_value(bitstring, t) :: number
   def sample_to_value(sample, %__MODULE__{format: format}) do
-    sample_to_value(sample, format)
-  end
-
-  def sample_to_value(sample, format) when is_atom(format) do
     case Format.to_tuple(format) do
       {:s, size, endianness} when endianness in [:le, :any] ->
         <<value::integer-size(size)-little-signed>> = sample
@@ -197,12 +189,8 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec value_to_sample(number, t | Format.t()) :: binary
+  @spec value_to_sample(number, t) :: binary
   def value_to_sample(value, %__MODULE__{format: format}) do
-    value_to_sample(value, format)
-  end
-
-  def value_to_sample(value, format) when is_atom(format) do
     case Format.to_tuple(format) do
       {:s, size, endianness} when endianness in [:le, :any] ->
         <<value::integer-size(size)-little-signed>>
@@ -357,60 +345,5 @@ defmodule Membrane.Caps.Audio.Raw do
   def bytes_to_time(bytes, %__MODULE__{} = caps, round_f \\ &trunc/1)
       when bytes >= 0 do
     frames_to_time(bytes |> bytes_to_frames(caps), caps, round_f)
-  end
-
-  @doc """
-  Returns how many bytes are needed to store single frame of given format.
-
-  Inlined by the compiler.
-  """
-  @spec format_to_sample_size(Format.t()) :: {:ok, pos_integer}
-  @deprecated "Use sample_size/2 instead, mind the new typespec"
-  def format_to_sample_size(:s8), do: {:ok, 1}
-  def format_to_sample_size(:u8), do: {:ok, 1}
-  def format_to_sample_size(:s16le), do: {:ok, 2}
-  def format_to_sample_size(:s24le), do: {:ok, 3}
-  def format_to_sample_size(:s32le), do: {:ok, 4}
-  def format_to_sample_size(:u16le), do: {:ok, 2}
-  def format_to_sample_size(:u32le), do: {:ok, 4}
-  def format_to_sample_size(:s16be), do: {:ok, 2}
-  def format_to_sample_size(:s32be), do: {:ok, 4}
-  def format_to_sample_size(:u16be), do: {:ok, 2}
-  def format_to_sample_size(:u32be), do: {:ok, 4}
-  def format_to_sample_size(:f32le), do: {:ok, 4}
-  def format_to_sample_size(:f32be), do: {:ok, 4}
-
-  @doc """
-  Similar to `format_to_sample_size/1` but returns just plain value.
-
-  Inlined by the compiler.
-  """
-  @spec format_to_sample_size!(Format.t()) :: pos_integer
-  @deprecated "Use sample_size/2 instead, mind the new typespec"
-  def format_to_sample_size!(format) do
-    {:ok, value} = format_to_sample_size(format)
-    value
-  end
-
-  @doc """
-  Same as value_to_sample/2, but returns just a plain binary
-
-  Inlined by the compiler.
-  """
-  @spec value_to_sample!(number, Format.t()) :: binary
-  @deprecated "Use value_to_sample/2 instead, mind the new typespec"
-  def value_to_sample!(value, format) do
-    value_to_sample(value, format)
-  end
-
-  @doc """
-  Similar to `sample_to_value/2` but returns just plain value.
-
-  Inlined by the compiler.
-  """
-  @spec sample_to_value!(bitstring, Format.t()) :: number
-  @deprecated "Use sample_to_value/2 instead, mind the new typespec"
-  def sample_to_value!(sample, format) do
-    sample_to_value(sample, format)
   end
 end
