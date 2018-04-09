@@ -253,9 +253,11 @@ defmodule Membrane.Caps.Audio.RawSpec do
   describe ".value_to_sample/2" do
     let :value, do: 42
 
-    let :expect_result, do: fn format, result ->
-      expect(described_module().value_to_sample(value(), format_to_caps(format))) |> to(eq result)
-    end
+    let :expect_result,
+      do: fn format, result ->
+        expect(described_module().value_to_sample(value(), format_to_caps(format)))
+        |> to(eq result)
+      end
 
     it "should properly encode 42 as sample in different formats" do
       expect_result().(:s8, <<value()>>)
@@ -281,15 +283,17 @@ defmodule Membrane.Caps.Audio.RawSpec do
   describe ".value_to_sample_check_overflow/2" do
     let :value, do: 42
 
-    let :expect_result, do: fn format, result ->
-      expect(described_module().value_to_sample_check_overflow(value(), format_to_caps(format)))
-      |> to(eq result)
-    end
+    let :expect_result,
+      do: fn format, result ->
+        expect(described_module().value_to_sample_check_overflow(value(), format_to_caps(format)))
+        |> to(eq result)
+      end
 
-    let :expect_error, do: fn value, format ->
-      expect(described_module().value_to_sample_check_overflow(value, format_to_caps(format)))
-      |> to(eq {:error, :overflow})
-    end
+    let :expect_error,
+      do: fn value, format ->
+        expect(described_module().value_to_sample_check_overflow(value, format_to_caps(format)))
+        |> to(eq {:error, :overflow})
+      end
 
     it "should properly encode 42 as sample in different formats" do
       expect_result().(:s8, {:ok, <<value()>>})
