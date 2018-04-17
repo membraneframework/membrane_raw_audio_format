@@ -19,11 +19,3 @@ reason, just add the following line to your `deps` in the `mix.exs` and run
 ```elixir
 {:membrane_caps_audio_raw, git: "git@github.com:membraneframework/membrane-caps-audio-raw.git"}
 ```
-
-# Authors
-
-* Marcin Lewandowski ([@mspanc](https://twitter.com/mspanc))
-
-# License
-
-MIT
