@@ -24,7 +24,9 @@ defmodule Membrane.Caps.Audio.Raw.Format do
     :s32be,
     :u32be,
     :f32le,
-    :f32be
+    :f32be,
+    :f64le,
+    :f64be
   ]
 
   def values, do: @formats
@@ -32,7 +34,7 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   def_type_from_list t :: @formats
 
   @type sample_type_t :: :s | :u | :f
-  @type sample_size_t :: 8 | 16 | 24 | 32
+  @type sample_size_t :: 8 | 16 | 24 | 32 | 64
   @type endianness_t :: :le | :be | :any
 
   @spec to_tuple(t) :: {sample_type_t, sample_size_t, endianness_t}
@@ -52,6 +54,8 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   def to_tuple(:u32be), do: {:u, 32, :be}
   def to_tuple(:f32le), do: {:f, 32, :le}
   def to_tuple(:f32be), do: {:f, 32, :be}
+  def to_tuple(:f64le), do: {:f, 64, :le}
+  def to_tuple(:f64be), do: {:f, 64, :be}
 
   @spec from_tuple({sample_type_t, sample_size_t, endianness_t}) :: t
   def from_tuple({:s, 8, :any}), do: :s8
@@ -70,6 +74,8 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   def from_tuple({:u, 32, :be}), do: :u32be
   def from_tuple({:f, 32, :le}), do: :f32le
   def from_tuple({:f, 32, :be}), do: :f32be
+  def from_tuple({:f, 64, :le}), do: :f64le
+  def from_tuple({:f, 64, :be}), do: :f64be
 
   # Serialization constants
 

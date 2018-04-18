@@ -11,7 +11,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
       licenses: ["Apache 2.0"],
       name: "Membrane Caps: Audio.Raw",
       source_url: "https://github.com/membraneframework/membrane-caps-audio-raw",
-      preferred_cli_env: [espec: :test],
+      preferred_cli_env: [espec: :test, format: :test],
       deps: deps()
     ]
   end

@@ -23,14 +23,17 @@ defmodule Membrane.Caps.Audio.RawSpec do
       :s32be,
       :u32be,
       :f32le,
-      :f32be
+      :f32be,
+      :f64le,
+      :f64be
     ]
 
   describe ".sample_size/1" do
     let :sample_sizes, do: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4]
 
     it "should return proper size in bytes for each sample format" do
-      all_formats() |> Enum.zip(sample_sizes())
+      all_formats()
+      |> Enum.zip(sample_sizes())
       |> Enum.each(fn {fmt, size} ->
         caps = fmt |> format_to_caps()
         expect(described_module().sample_size(caps)) |> to(eq size)
@@ -42,7 +45,8 @@ defmodule Membrane.Caps.Audio.RawSpec do
     let :frame_sizes, do: [2, 2, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8, 8, 8]
 
     it "should return proper frame in bytes for each caps" do
-      all_formats() |> Enum.zip(frame_sizes())
+      all_formats()
+      |> Enum.zip(frame_sizes())
       |> Enum.each(fn {fmt, size} ->
         caps = fmt |> format_to_caps()
         expect(described_module().frame_size(caps)) |> to(eq size)
@@ -50,7 +54,7 @@ defmodule Membrane.Caps.Audio.RawSpec do
     end
   end
 
-  let :float_caps, do: [:f32be, :f32le] |> Enum.map(&format_to_caps/1)
+  let :float_caps, do: [:f32be, :f32le, :f64le, :f64be] |> Enum.map(&format_to_caps/1)
 
   let :non_float_caps,
     do:
@@ -113,7 +117,8 @@ defmodule Membrane.Caps.Audio.RawSpec do
         :u24le,
         :s32le,
         :u32le,
-        :f32le
+        :f32le,
+        :f64le
       ]
       |> Enum.map(&format_to_caps/1)
 
@@ -126,7 +131,8 @@ defmodule Membrane.Caps.Audio.RawSpec do
         :u24be,
         :s32be,
         :u32be,
-        :f32be
+        :f32be,
+        :f64be
       ]
       |> Enum.map(&format_to_caps/1)
 
@@ -568,6 +574,24 @@ defmodule Membrane.Caps.Audio.RawSpec do
         expect(described_module().sample_min(caps())) |> to(eq value())
       end
     end
+
+    context "if format is :f64le" do
+      let :caps, do: :f64le |> format_to_caps
+      let :value, do: -1.0
+
+      it "should return minimum integer for underlying data type" do
+        expect(described_module().sample_min(caps())) |> to(eq value())
+      end
+    end
+
+    context "if format is :f64be" do
+      let :caps, do: :f64be |> format_to_caps
+      let :value, do: -1.0
+
+      it "should return minimum integer for underlying data type" do
+        expect(described_module().sample_min(caps())) |> to(eq value())
+      end
+    end
   end
 
   describe ".sample_max/1" do
@@ -672,6 +696,24 @@ defmodule Membrane.Caps.Audio.RawSpec do
 
     context "if format is :f32be" do
       let :caps, do: :f32be |> format_to_caps
+      let :value, do: 1.0
+
+      it "should return maximum integer for underlying data type" do
+        expect(described_module().sample_max(caps())) |> to(eq value())
+      end
+    end
+
+    context "if format is :f64le" do
+      let :caps, do: :f64le |> format_to_caps
+      let :value, do: 1.0
+
+      it "should return maximum integer for underlying data type" do
+        expect(described_module().sample_max(caps())) |> to(eq value())
+      end
+    end
+
+    context "if format is :f64be" do
+      let :caps, do: :f64be |> format_to_caps
       let :value, do: 1.0
 
       it "should return maximum integer for underlying data type" do

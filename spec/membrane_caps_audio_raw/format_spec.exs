@@ -18,7 +18,9 @@ defmodule Membrane.Caps.Audio.Raw.FormatSpec do
       :s32be,
       :u32be,
       :f32le,
-      :f32be
+      :f32be,
+      :f64le,
+      :f64be
     ]
 
   let :all_tuples,
@@ -38,7 +40,9 @@ defmodule Membrane.Caps.Audio.Raw.FormatSpec do
       {:s, 32, :be},
       {:u, 32, :be},
       {:f, 32, :le},
-      {:f, 32, :be}
+      {:f, 32, :be},
+      {:f, 64, :le},
+      {:f, 64, :be}
     ]
 
   describe "to_tuple/1" do
