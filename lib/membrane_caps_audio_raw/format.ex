@@ -2,6 +2,11 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   use Bitwise
   import Membrane.Helper.Typespec
 
+  @moduledoc """
+  This module defines formats used in `Membrane.Caps.Audio.Raw.Caps`
+  and some helpers to deal with them.
+  """
+
   @compile {:inline,
             [
               to_tuple: 1,
@@ -37,6 +42,9 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   @type sample_size_t :: 8 | 16 | 24 | 32 | 64
   @type endianness_t :: :le | :be | :any
 
+  @doc """
+  Converts format atom to an equivalent 3-tuple form
+  """
   @spec to_tuple(t) :: {sample_type_t, sample_size_t, endianness_t}
   def to_tuple(:s8), do: {:s, 8, :any}
   def to_tuple(:u8), do: {:u, 8, :any}
@@ -57,6 +65,9 @@ defmodule Membrane.Caps.Audio.Raw.Format do
   def to_tuple(:f64le), do: {:f, 64, :le}
   def to_tuple(:f64be), do: {:f, 64, :be}
 
+  @doc """
+  Converts 3-tuple format to an equivalent atom form
+  """
   @spec from_tuple({sample_type_t, sample_size_t, endianness_t}) :: t
   def from_tuple({:s, 8, :any}), do: :s8
   def from_tuple({:u, 8, :any}), do: :u8
