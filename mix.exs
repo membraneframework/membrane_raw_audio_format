@@ -7,12 +7,18 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
       version: "0.0.1",
       elixir: "~> 1.6",
       description: "Membrane Multimedia Framework (raw audio format definition)",
-      maintainers: ["Membrane Team"],
-      licenses: ["Apache 2.0"],
+      package: package(),
       name: "Membrane Caps: Audio.Raw",
       source_url: "https://github.com/membraneframework/membrane-caps-audio-raw",
       preferred_cli_env: [espec: :test, format: :test],
       deps: deps()
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["Membrane Team"],
+      licenses: ["Apache 2.0"]
     ]
   end
 
