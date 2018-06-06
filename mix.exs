@@ -10,7 +10,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
       package: package(),
       name: "Membrane Caps: Audio.Raw",
       source_url: link(),
-      homepage_url: "https://membraneframework.org",
+      docs: docs(),
       preferred_cli_env: [espec: :test, format: :test],
       deps: deps()
     ]
@@ -20,11 +20,21 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
     "https://github.com/membraneframework/membrane-caps-audio-raw"
   end
 
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"]
+    ]
+  end
+
   defp package do
     [
       maintainers: ["Membrane Team"],
       licenses: ["Apache 2.0"],
-      links: %{"GitHub" => link()}
+      links: %{
+        "GitHub" => link(),
+        "Membrane Framework Homepage" => "https://membraneframework.org"
+      }
     ]
   end
 
@@ -33,7 +43,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
       {:ex_doc, "~> 0.18", only: :dev, runtime: false},
       {:espec, "~> 1.5", only: :test},
       {:bimap, "~> 0.1"},
-      {:membrane_core, git: "git@github.com:membraneframework/membrane-core.git"}
+      {:membrane_core, "~> 0.1"}
     ]
   end
 end
