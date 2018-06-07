@@ -1,5 +1,7 @@
 # Membrane Multimedia Framework: Raw audio format definition
 
+[![Build Status](https://travis-ci.com/membraneframework/membrane-caps-audio-raw.svg?branch=master)](https://travis-ci.com/membraneframework/membrane-caps-audio-raw)
+
 This package provides raw audio format definition (so-called caps) for the
 [Membrane Multimedia Framework](https://membraneframework.org).
 
