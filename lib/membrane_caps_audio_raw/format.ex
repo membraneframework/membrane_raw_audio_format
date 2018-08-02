@@ -1,6 +1,6 @@
 defmodule Membrane.Caps.Audio.Raw.Format do
   use Bitwise
-  import Membrane.Helper.Typespec
+  use Membrane.Helper.Typespec
 
   @moduledoc """
   This module defines formats used in `Membrane.Caps.Audio.Raw.Caps`
@@ -13,7 +13,7 @@ defmodule Membrane.Caps.Audio.Raw.Format do
               from_tuple: 1
             ]}
 
-  @formats [
+  @list_type t :: [
     :s8,
     :u8,
     :s16le,
@@ -34,9 +34,7 @@ defmodule Membrane.Caps.Audio.Raw.Format do
     :f64be
   ]
 
-  def values, do: @formats
-
-  def_type_from_list t :: @formats
+  def values, do: @t
 
   @type sample_type_t :: :s | :u | :f
   @type sample_size_t :: 8 | 16 | 24 | 32 | 64
@@ -122,7 +120,7 @@ defmodule Membrane.Caps.Audio.Raw.Format do
 
   expects serialized format
 
-  returns Format.t
+  returns format atom (See `t:t/0`)
   """
   @spec deserialize(pos_integer) :: t
   def deserialize(serialized_format) do
