@@ -1,10 +1,12 @@
 defmodule Membrane.Caps.Audio.Raw.Mixfile do
   use Mix.Project
 
+  @version "0.1.1"
+
   def project do
     [
       app: :membrane_caps_audio_raw,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.6",
       description: "Membrane Multimedia Framework (raw audio format definition)",
       package: package(),
@@ -23,7 +25,8 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md"]
+      extras: ["README.md"],
+      source_ref: "v#{@version}"
     ]
   end
 
