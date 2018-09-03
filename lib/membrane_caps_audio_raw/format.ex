@@ -1,6 +1,6 @@
 defmodule Membrane.Caps.Audio.Raw.Format do
   use Bitwise
-  use Membrane.Helper.Typespec
+  use Bunch.Typespec
 
   @moduledoc """
   This module defines formats used in `Membrane.Caps.Audio.Raw.Caps`
