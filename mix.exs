@@ -1,7 +1,8 @@
 defmodule Membrane.Caps.Audio.Raw.Mixfile do
   use Mix.Project
 
-  @version "0.1.1"
+  @version "0.1.2"
+  @github_link "https://github.com/membraneframework/membrane-caps-audio-raw"
 
   def project do
     [
@@ -11,15 +12,11 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
       description: "Membrane Multimedia Framework (raw audio format definition)",
       package: package(),
       name: "Membrane Caps: Audio.Raw",
-      source_url: link(),
+      source_url: @github_link,
       docs: docs(),
       preferred_cli_env: [espec: :test, format: :test],
       deps: deps()
     ]
-  end
-
-  defp link do
-    "https://github.com/membraneframework/membrane-caps-audio-raw"
   end
 
   defp docs do
@@ -35,7 +32,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
       maintainers: ["Membrane Team"],
       licenses: ["Apache 2.0"],
       links: %{
-        "GitHub" => link(),
+        "GitHub" => @github_link,
         "Membrane Framework Homepage" => "https://membraneframework.org"
       }
     ]
@@ -43,7 +40,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.18", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:espec, "~> 1.5", only: :test},
       {:bimap, "~> 0.1"},
       {:bunch, "~> 0.1"},
