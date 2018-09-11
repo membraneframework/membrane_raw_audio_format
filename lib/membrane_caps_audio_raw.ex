@@ -288,7 +288,7 @@ defmodule Membrane.Caps.Audio.Raw do
   of time in given caps' fromat
 
   ## Examples:
-  The following code generates one second of the silence for the given caps
+  The following code generates the silence for the given caps
 
       iex> alias Membrane.Caps.Audio.Raw, as: Caps
       iex> caps = %Caps{sample_rate: 48_000, format: :s16le, channels: 2}
