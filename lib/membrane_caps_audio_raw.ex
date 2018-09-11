@@ -289,11 +289,13 @@ defmodule Membrane.Caps.Audio.Raw do
 
   ## Examples:
   The following code generates one second of the silence for the given caps
-  ```
-  iex> alias Membrane.Caps.Audio.Raw, as: Caps
-  iex> alias Membrane.Time
-  iex> silence = Caps.sound_of_silence(caps, 1 |> Time.second)
-  ```
+
+    iex> alias Membrane.Caps.Audio.Raw, as: Caps
+    Membrane.Caps.Audio.Raw
+    iex> caps = %Caps{sample_rate: 48_000, format: :s16le, channels: 2}
+    %Membrane.Caps.Audio.Raw{channels: 2, format: :s16le, sample_rate: 48000}
+    iex> silence = Caps.sound_of_silence(caps, 100 |> Membrane.Time.microseconds)
+    <<0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>>
   """
   @spec sound_of_silence(t, Time.non_neg_t(), (float -> integer)) :: binary
   def sound_of_silence(%__MODULE__{} = caps, time, round_f \\ &(&1 |> :math.ceil() |> trunc))
