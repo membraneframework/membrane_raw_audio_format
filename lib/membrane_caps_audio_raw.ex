@@ -284,6 +284,25 @@ defmodule Membrane.Caps.Audio.Raw do
   end
 
   @doc """
+  Returns a binary which corresponds to the silence during the given interval
+  of time in given caps' fromat
+
+  ## Examples:
+  The following code generates the silence for the given caps
+
+      iex> alias Membrane.Caps.Audio.Raw, as: Caps
+      iex> caps = %Caps{sample_rate: 48_000, format: :s16le, channels: 2}
+      iex> silence = Caps.sound_of_silence(caps, 100 |> Membrane.Time.microseconds)
+      <<0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>>
+  """
+  @spec sound_of_silence(t, Time.non_neg_t(), (float -> integer)) :: binary
+  def sound_of_silence(%__MODULE__{} = caps, time, round_f \\ &(&1 |> :math.ceil() |> trunc))
+      when time >= 0 do
+    length = time_to_frames(time, caps, round_f)
+    caps |> sound_of_silence |> String.duplicate(caps.channels * length)
+  end
+
+  @doc """
   Converts frames to bytes in given caps.
 
   Inlined by the compiler.

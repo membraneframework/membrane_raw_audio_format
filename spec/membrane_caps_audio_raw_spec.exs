@@ -2,6 +2,8 @@ defmodule Membrane.Caps.Audio.RawSpec do
   use ESpec, async: true
   alias Membrane.Caps.Audio.Raw, as: Caps
 
+  doctest Membrane.Caps.Audio.Raw
+
   defp format_to_caps(format) do
     %Caps{format: format, channels: 2, sample_rate: 44100}
   end
