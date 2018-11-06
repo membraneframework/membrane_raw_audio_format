@@ -1,13 +1,13 @@
 %{
   "bimap": {:hex, :bimap, "0.1.1", "f0406e59f65ba903af678383d2356d0a6e59fb794adc1a7dd32bd8fabe0f028f", [:mix], [], "hexpm"},
-  "bunch": {:git, "https://github.com/membraneframework/bunch.git", "b1873c889704b9a08d61f04549a7f2dbf4e1358d", []},
+  "bunch": {:hex, :bunch, "0.1.2", "2389a4bcdb62382fbfeed9e19952cc22452dc0c01b4bcac941cce00ef212d7b4", [:mix], [], "hexpm"},
   "earmark": {:hex, :earmark, "1.2.6", "b6da42b3831458d3ecc57314dff3051b080b9b2be88c2e5aa41cd642a5b044ed", [:mix], [], "hexpm"},
-  "espec": {:hex, :espec, "1.6.2", "c9a5877d860dfb7e797ee84064af11893b9550d94bb915b5d566a08064cc28fe", [:mix], [{:meck, "0.8.12", [hex: :meck, repo: "hexpm", optional: false]}], "hexpm"},
+  "espec": {:hex, :espec, "1.6.3", "d9355788e508b82743a1b1b9aa5ac64ba37b0547c6210328d909e8a6eb56d42e", [:mix], [{:meck, "0.8.12", [hex: :meck, repo: "hexpm", optional: false]}], "hexpm"},
   "ex_doc": {:hex, :ex_doc, "0.19.1", "519bb9c19526ca51d326c060cb1778d4a9056b190086a8c6c115828eaccea6cf", [:mix], [{:earmark, "~> 1.1", [hex: :earmark, repo: "hexpm", optional: false]}, {:makeup_elixir, "~> 0.7", [hex: :makeup_elixir, repo: "hexpm", optional: false]}], "hexpm"},
   "makeup": {:hex, :makeup, "0.5.5", "9e08dfc45280c5684d771ad58159f718a7b5788596099bdfb0284597d368a882", [:mix], [{:nimble_parsec, "~> 0.4", [hex: :nimble_parsec, repo: "hexpm", optional: false]}], "hexpm"},
   "makeup_elixir": {:hex, :makeup_elixir, "0.10.0", "0f09c2ddf352887a956d84f8f7e702111122ca32fbbc84c2f0569b8b65cbf7fa", [:mix], [{:makeup, "~> 0.5.5", [hex: :makeup, repo: "hexpm", optional: false]}], "hexpm"},
   "meck": {:hex, :meck, "0.8.12", "1f7b1a9f5d12c511848fec26bbefd09a21e1432eadb8982d9a8aceb9891a3cf2", [:rebar3], [], "hexpm"},
-  "membrane_core": {:git, "https://github.com/membraneframework/membrane-core.git", "840ecff1e8238dd3f2b60e31ef00c3f66ccc45c0", []},
+  "membrane_core": {:hex, :membrane_core, "0.2.0", "de05223ce50661518d47ac9bfb79854483490d8322876724c86cef3aa806b66c", [:mix], [{:bunch, "~> 0.1.2", [hex: :bunch, repo: "hexpm", optional: false]}, {:qex, "~> 0.3", [hex: :qex, repo: "hexpm", optional: false]}], "hexpm"},
   "nimble_parsec": {:hex, :nimble_parsec, "0.4.0", "ee261bb53214943679422be70f1658fff573c5d0b0a1ecd0f18738944f818efe", [:mix], [], "hexpm"},
   "qex": {:hex, :qex, "0.5.0", "5a3a9becf67d4006377c4c247ffdaaa8ae5b3634a0caadb788dc24d6125068f4", [:mix], [], "hexpm"},
 }
