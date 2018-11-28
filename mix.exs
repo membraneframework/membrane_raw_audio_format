@@ -42,7 +42,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
     [
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:espec, "~> 1.5", only: :test},
-      {:bimap, "~> 0.1"},
+      {:bimap, "~> 1.0"},
       {:bunch, "~> 0.1"},
       {:membrane_core, "~> 0.2"}
     ]
