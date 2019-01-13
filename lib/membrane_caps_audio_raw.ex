@@ -265,24 +265,24 @@ defmodule Membrane.Caps.Audio.Raw do
   Inlined by the compiler.
   """
   @spec sound_of_silence(t) :: binary
-  def sound_of_silence(%__MODULE__{format: :s8}), do: << 0 >>
-  def sound_of_silence(%__MODULE__{format: :u8}), do: << 128 >>
-  def sound_of_silence(%__MODULE__{format: :s16le}), do: << 0, 0 >>
-  def sound_of_silence(%__MODULE__{format: :u16le}), do: << 0, 128 >>
-  def sound_of_silence(%__MODULE__{format: :s16be}), do: << 0, 0 >>
-  def sound_of_silence(%__MODULE__{format: :u16be}), do: << 128, 0 >>
-  def sound_of_silence(%__MODULE__{format: :s24le}), do: << 0, 0, 0 >>
-  def sound_of_silence(%__MODULE__{format: :u24le}), do: << 0, 0, 128 >>
-  def sound_of_silence(%__MODULE__{format: :s24be}), do: << 0, 0, 0 >>
-  def sound_of_silence(%__MODULE__{format: :u24be}), do: << 128, 0, 0 >>
-  def sound_of_silence(%__MODULE__{format: :s32le}), do: << 0, 0, 0, 0 >>
-  def sound_of_silence(%__MODULE__{format: :u32le}), do: << 0, 0, 0, 128 >>
-  def sound_of_silence(%__MODULE__{format: :s32be}), do: << 0, 0, 0, 0 >>
-  def sound_of_silence(%__MODULE__{format: :u32be}), do: << 128, 0, 0, 0 >>
-  def sound_of_silence(%__MODULE__{format: :f32le}), do: << 0, 0, 0, 0 >>
-  def sound_of_silence(%__MODULE__{format: :f32be}), do: << 0, 0, 0, 0 >>
+  def sound_of_silence(%__MODULE__{format: :s8}), do: <<0>>
+  def sound_of_silence(%__MODULE__{format: :u8}), do: <<128>>
+  def sound_of_silence(%__MODULE__{format: :s16le}), do: <<0, 0>>
+  def sound_of_silence(%__MODULE__{format: :u16le}), do: <<0, 128>>
+  def sound_of_silence(%__MODULE__{format: :s16be}), do: <<0, 0>>
+  def sound_of_silence(%__MODULE__{format: :u16be}), do: <<128, 0>>
+  def sound_of_silence(%__MODULE__{format: :s24le}), do: <<0, 0, 0>>
+  def sound_of_silence(%__MODULE__{format: :u24le}), do: <<0, 0, 128>>
+  def sound_of_silence(%__MODULE__{format: :s24be}), do: <<0, 0, 0>>
+  def sound_of_silence(%__MODULE__{format: :u24be}), do: <<128, 0, 0>>
+  def sound_of_silence(%__MODULE__{format: :s32le}), do: <<0, 0, 0, 0>>
+  def sound_of_silence(%__MODULE__{format: :u32le}), do: <<0, 0, 0, 128>>
+  def sound_of_silence(%__MODULE__{format: :s32be}), do: <<0, 0, 0, 0>>
+  def sound_of_silence(%__MODULE__{format: :u32be}), do: <<128, 0, 0, 0>>
+  def sound_of_silence(%__MODULE__{format: :f32le}), do: <<0, 0, 0, 0>>
+  def sound_of_silence(%__MODULE__{format: :f32be}), do: <<0, 0, 0, 0>>
   def sound_of_silence(%__MODULE__{format: :f64le}), do: <<0, 0, 0, 0, 0, 0, 0, 0>>
-  def sound_of_silence(%__MODULE__{format: :f64be}), do: <<0, 0, 0, 0, 0, 0, 0, 0>>    
+  def sound_of_silence(%__MODULE__{format: :f64be}), do: <<0, 0, 0, 0, 0, 0, 0, 0>>
 
   @doc """
   Returns a binary which corresponds to the silence during the given interval
