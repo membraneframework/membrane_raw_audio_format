@@ -1,7 +1,7 @@
 defmodule Membrane.Caps.Audio.Raw.Mixfile do
   use Mix.Project
 
-  @version "0.1.4"
+  @version "0.1.5"
   @github_link "https://github.com/membraneframework/membrane-caps-audio-raw"
 
   def project do
