@@ -1,7 +1,7 @@
 defmodule Membrane.Caps.Audio.Raw.Mixfile do
   use Mix.Project
 
-  @version "0.1.5"
+  @version "0.1.6"
   @github_link "https://github.com/membraneframework/membrane-caps-audio-raw"
 
   def project do
@@ -41,9 +41,9 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
   defp deps do
     [
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:espec, "~> 1.5", only: :test},
+      {:espec, "~> 1.7", only: :test},
       {:bimap, "~> 1.0"},
-      {:bunch, "~> 0.1"},
+      {:bunch, "~> 1.0"},
       {:membrane_core, "~> 0.2"}
     ]
   end
