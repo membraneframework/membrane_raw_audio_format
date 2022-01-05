@@ -21,7 +21,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md"],
+      extras: ["README.md", "LICENSE"],
       source_ref: "v#{@version}"
     ]
   end
