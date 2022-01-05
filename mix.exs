@@ -1,17 +1,17 @@
 defmodule Membrane.Caps.Audio.Raw.Mixfile do
   use Mix.Project
 
-  @version "0.5.0"
-  @github_link "https://github.com/membraneframework/membrane-caps-audio-raw"
+  @version "0.5.1"
+  @github_link "https://github.com/membraneframework/membrane_caps_audio_raw"
 
   def project do
     [
       app: :membrane_caps_audio_raw,
       version: @version,
-      elixir: "~> 1.7",
-      description: "Membrane Multimedia Framework (raw audio format definition)",
+      elixir: "~> 1.12",
+      description: "Raw audio format definition for Membrane Multimedia Framework",
       package: package(),
-      name: "Membrane Caps: Audio.Raw",
+      name: "Membrane: raw audio format",
       source_url: @github_link,
       docs: docs(),
       preferred_cli_env: [espec: :test, format: :test],
@@ -30,7 +30,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
   defp package do
     [
       maintainers: ["Membrane Team"],
-      licenses: ["Apache 2.0"],
+      licenses: ["Apache-2.0"],
       links: %{
         "GitHub" => @github_link,
         "Membrane Framework Homepage" => "https://membraneframework.org"
@@ -40,11 +40,13 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:espec, "~> 1.7", only: :test},
+      {:membrane_core, "~> 0.8.0"},
       {:bimap, "~> 1.0"},
       {:bunch, "~> 1.0"},
-      {:membrane_core, "~> 0.8.0"}
+      {:espec, "~> 1.8", only: :test},
+      {:ex_doc, "~> 0.26", only: :dev, runtime: false},
+      {:credo, "~> 1.6", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.1", only: :dev, runtime: false}
     ]
   end
 end

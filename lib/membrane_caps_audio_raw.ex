@@ -1,11 +1,11 @@
 defmodule Membrane.Caps.Audio.Raw do
-  alias __MODULE__.Format
-  alias Membrane.Time
-
   @moduledoc """
   This module implements struct for caps representing raw audio stream with
   interleaved channels.
   """
+
+  alias __MODULE__.Format
+  alias Membrane.Time
 
   @compile {:inline,
             [
@@ -318,7 +318,7 @@ defmodule Membrane.Caps.Audio.Raw do
 
   Inlined by the compiler.
   """
-  @spec bytes_to_frames(non_neg_integer, t) :: non_neg_integer
+  @spec bytes_to_frames(non_neg_integer, t, (float -> integer)) :: non_neg_integer
   def bytes_to_frames(bytes, %__MODULE__{} = caps, round_f \\ &trunc/1) when bytes >= 0 do
     (bytes / frame_size(caps)) |> round_f.()
   end
