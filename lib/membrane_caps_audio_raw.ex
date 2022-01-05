@@ -331,7 +331,7 @@ defmodule Membrane.Caps.Audio.Raw do
   @spec time_to_frames(Time.non_neg_t(), t, (float -> integer)) :: non_neg_integer
   def time_to_frames(time, %__MODULE__{} = caps, round_f \\ &(&1 |> :math.ceil() |> trunc))
       when time >= 0 do
-    (time * caps.sample_rate / (1 |> Time.second())) |> round_f.()
+    (time * caps.sample_rate / Time.second()) |> round_f.()
   end
 
   @doc """
@@ -342,7 +342,7 @@ defmodule Membrane.Caps.Audio.Raw do
   @spec frames_to_time(non_neg_integer, t, (float -> integer)) :: Time.non_neg_t()
   def frames_to_time(frames, %__MODULE__{} = caps, round_f \\ &trunc/1)
       when frames >= 0 do
-    (frames * (1 |> Time.second()) / caps.sample_rate) |> round_f.()
+    (frames * Time.second() / caps.sample_rate) |> round_f.()
   end
 
   @doc """
