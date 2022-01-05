@@ -14,7 +14,6 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
       name: "Membrane: raw audio format",
       source_url: @github_link,
       docs: docs(),
-      preferred_cli_env: [espec: :test, format: :test],
       deps: deps()
     ]
   end
@@ -43,7 +42,6 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
       {:membrane_core, "~> 0.8.0"},
       {:bimap, "~> 1.0"},
       {:bunch, "~> 1.0"},
-      {:espec, "~> 1.8", only: :test},
       {:ex_doc, "~> 0.26", only: :dev, runtime: false},
       {:credo, "~> 1.6", only: :dev, runtime: false},
       {:dialyxir, "~> 1.1", only: :dev, runtime: false}
