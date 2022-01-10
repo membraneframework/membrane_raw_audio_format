@@ -1,8 +1,8 @@
 [
   inputs: [
-    "{lib,spec,config}/**/*.{ex,exs}",
-    "mix.exs"
+    "{lib,test,config}/**/*.{ex,exs}",
+    "mix.exs",
+    ".formatter.exs"
   ],
-  import_deps: [:membrane_core, :espec]
+  import_deps: [:membrane_core]
 ]
-

@@ -1,11 +1,11 @@
 defmodule Membrane.Caps.Audio.Raw.Format do
-  use Bitwise
-  use Bunch.Typespec
-
   @moduledoc """
   This module defines formats used in `Membrane.Caps.Audio.Raw.Caps`
   and some helpers to deal with them.
   """
+
+  use Bitwise
+  use Bunch.Typespec
 
   @compile {:inline,
             [
@@ -34,7 +34,8 @@ defmodule Membrane.Caps.Audio.Raw.Format do
                :f64be
              ]
 
-  def values, do: @t
+  @spec values() :: [t()]
+  def values(), do: @t
 
   @type sample_type_t :: :s | :u | :f
   @type sample_size_t :: 8 | 16 | 24 | 32 | 64
@@ -114,6 +115,10 @@ defmodule Membrane.Caps.Audio.Raw.Format do
     0 ||| @sample_types[type] ||| (@sample_endiannesses[endianness] || @sample_endiannesses[:le]) |||
       size
   end
+
+  # Workaround for dialyzer not handling opaque term creation at compile time
+  # See: https://github.com/elixir-lang/elixir/issues/8463
+  @dialyzer [{:no_opaque, deserialize: 1}]
 
   @doc """
   Converts positive integer containing serialized format to atom.
