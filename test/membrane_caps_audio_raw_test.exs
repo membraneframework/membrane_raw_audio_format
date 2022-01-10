@@ -28,7 +28,9 @@ defmodule Membrane.RawAudioTest do
   end
 
   test "sample_size/1" do
-    sizes = [1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4]
+    sizes = [1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 8, 8]
+
+    assert length(@all_formats) == length(sizes)
 
     @all_formats
     |> Enum.map(&format_to_caps/1)
@@ -39,7 +41,9 @@ defmodule Membrane.RawAudioTest do
   end
 
   test "frame_size/1" do
-    sizes = [2, 2, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8, 8, 8]
+    sizes = [2, 2, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8, 8, 8, 16, 16]
+
+    assert length(@all_formats) == length(sizes)
 
     @all_formats
     |> Enum.map(&format_to_caps/1)
