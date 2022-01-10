@@ -22,7 +22,8 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
     [
       main: "readme",
       extras: ["README.md", "LICENSE"],
-      source_ref: "v#{@version}"
+      source_ref: "v#{@version}",
+      nest_modules_by_prefix: [Membrane.Caps]
     ]
   end
 

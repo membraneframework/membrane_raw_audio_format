@@ -1,6 +1,8 @@
 # Membrane Multimedia Framework: Raw audio format definition
 
-[![CircleCI](https://circleci.com/gh/membraneframework/membrane-caps-audio-raw.svg?style=svg)](https://circleci.com/gh/membraneframework/membrane-caps-audio-raw)
+[![Hex.pm](https://img.shields.io/hexpm/v/membrane_caps_audio_raw.svg)](https://hex.pm/packages/membrane_caps_audio_raw)
+[![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/membrane_caps_audio_raw)
+[![CircleCI](https://circleci.com/gh/membraneframework/membrane_caps_audio_raw/tree/master.svg?style=svg)](https://circleci.com/gh/membraneframework/membrane_caps_audio_raw/tree/master)
 
 This package provides raw audio format definition (so-called caps) for the
 [Membrane Multimedia Framework](https://membraneframework.org).
@@ -19,7 +21,7 @@ reason, just add the following line to your `deps` in the `mix.exs` and run
 `mix deps.get`.
 
 ```elixir
-{:membrane_caps_audio_raw, "~> 0.5.0"}
+{:membrane_caps_audio_raw, "~> 0.5.1"}
 ```
 ## Copyright and License
 
