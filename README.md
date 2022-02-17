@@ -21,7 +21,7 @@ reason, just add the following line to your `deps` in the `mix.exs` and run
 `mix deps.get`.
 
 ```elixir
-{:membrane_caps_audio_raw, "~> 0.5.1"}
+{:membrane_caps_audio_raw, "~> 0.6.0"}
 ```
 ## Copyright and License
 
