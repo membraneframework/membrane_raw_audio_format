@@ -1,6 +1,6 @@
-defmodule Membrane.Caps.Audio.Raw.Format do
+defmodule Membrane.RawAudio.Format do
   @moduledoc """
-  This module defines formats used in `Membrane.Caps.Audio.Raw.Caps`
+  This module defines formats used in `Membrane.RawAudio.Caps`
   and some helpers to deal with them.
   """
 

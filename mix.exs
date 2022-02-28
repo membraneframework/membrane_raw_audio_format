@@ -1,12 +1,12 @@
 defmodule Membrane.Caps.Audio.Raw.Mixfile do
   use Mix.Project
 
-  @version "0.6.0"
+  @version "0.6.1"
   @github_link "https://github.com/membraneframework/membrane_caps_audio_raw"
 
   def project do
     [
-      app: :membrane_caps_audio_raw,
+      app: :membrane_raw_audio_format,
       version: @version,
       elixir: "~> 1.12",
       description: "Raw audio format definition for Membrane Multimedia Framework",
@@ -21,7 +21,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md", "LICENSE"],
+      extras: ["README.md", LICENSE: [title: "License"]],
       formatters: ["html"],
       source_ref: "v#{@version}",
       nest_modules_by_prefix: [Membrane.Caps]

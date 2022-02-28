@@ -1,6 +1,6 @@
-defmodule Membrane.Caps.Audio.Raw do
+defmodule Membrane.RawAudio do
   @moduledoc """
-  This module implements struct for caps representing raw audio stream with
+  This module implements struct (`t:#{inspect(__MODULE__)}.t/0`) for caps representing raw audio stream with
   interleaved channels.
   """
 
@@ -37,7 +37,7 @@ defmodule Membrane.Caps.Audio.Raw do
   # Sample rate of the audio.
   @type sample_rate_t :: pos_integer
 
-  @type t :: %Membrane.Caps.Audio.Raw{
+  @type t :: %Membrane.RawAudio{
           channels: channels_t,
           sample_rate: sample_rate_t,
           format: Format.t()
@@ -291,7 +291,7 @@ defmodule Membrane.Caps.Audio.Raw do
   ## Examples:
   The following code generates the silence for the given caps
 
-      iex> alias Membrane.Caps.Audio.Raw, as: Caps
+      iex> alias Membrane.RawAudio, as: Caps
       iex> caps = %Caps{sample_rate: 48_000, format: :s16le, channels: 2}
       iex> silence = Caps.sound_of_silence(caps, 100 |> Membrane.Time.microseconds)
       <<0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>>

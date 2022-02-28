@@ -21,8 +21,11 @@ reason, just add the following line to your `deps` in the `mix.exs` and run
 `mix deps.get`.
 
 ```elixir
-{:membrane_caps_audio_raw, "~> 0.6.0"}
+{:membrane_raw_audio_format, "~> 0.6.0"}
 ```
+
+
+
 ## Copyright and License
 
 Copyright 2018, [Software Mansion](https://swmansion.com/?utm_source=git&utm_medium=readme&utm_campaign=membrane)
