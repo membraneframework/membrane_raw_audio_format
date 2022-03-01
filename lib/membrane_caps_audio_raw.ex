@@ -1,7 +1,7 @@
 defmodule Membrane.RawAudio do
   @moduledoc """
-  This module implements struct (`t:#{inspect(__MODULE__)}.t/0`) for caps representing raw audio stream with
-  interleaved channels.
+  This module implements struct (`t:#{inspect(__MODULE__)}.t/0`)
+  for caps representing raw audio stream with interleaved channels.
   """
 
   alias __MODULE__.Format
