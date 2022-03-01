@@ -1,4 +1,4 @@
-defmodule Membrane.Caps.Audio.Raw.FormatTest do
+defmodule Membrane.RawAudio.FormatTest do
   use ExUnit.Case, async: true
 
   alias Membrane.RawAudio.Format, as: RawAudio
