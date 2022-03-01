@@ -21,7 +21,7 @@ reason, just add the following line to your `deps` in the `mix.exs` and run
 `mix deps.get`.
 
 ```elixir
-{:membrane_raw_audio_format, "~> 0.6.0"}
+{:membrane_raw_audio_format, "~> 0.6.1"}
 ```
 
 
