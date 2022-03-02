@@ -1,7 +1,7 @@
-defmodule Membrane.Caps.Audio.Raw.FormatTest do
+defmodule Membrane.RawAudio.FormatTest do
   use ExUnit.Case, async: true
 
-  alias Membrane.Caps.Audio.Raw.Format, as: RawAudio
+  alias Membrane.RawAudio.Format
 
   @all_formats [
     :s8,
@@ -48,21 +48,21 @@ defmodule Membrane.Caps.Audio.Raw.FormatTest do
   test "to_tuple/1" do
     Enum.zip(@all_formats, @all_tuples)
     |> Enum.each(fn {fmt, tuple} ->
-      assert RawAudio.to_tuple(fmt) == tuple
+      assert Format.to_tuple(fmt) == tuple
     end)
   end
 
   test "from_tuple/1" do
     Enum.zip(@all_tuples, @all_formats)
     |> Enum.each(fn {tuple, fmt} ->
-      assert RawAudio.from_tuple(tuple) == fmt
+      assert Format.from_tuple(tuple) == fmt
     end)
   end
 
   test "Using serialize/1 and then deserialize/1" do
     @all_formats
     |> Enum.each(fn fmt ->
-      assert fmt |> RawAudio.serialize() |> RawAudio.deserialize() == fmt
+      assert fmt |> Format.serialize() |> Format.deserialize() == fmt
     end)
   end
 end
