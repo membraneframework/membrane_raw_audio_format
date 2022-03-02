@@ -1,4 +1,4 @@
-defmodule Membrane.Caps.Audio.Raw.Mixfile do
+defmodule Membrane.RawAudio.Mixfile do
   use Mix.Project
 
   @version "0.6.1"
@@ -21,7 +21,7 @@ defmodule Membrane.Caps.Audio.Raw.Mixfile do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md", LICENSE: [title: "License"]],
+      extras: ["README.md", "LICENSE"],
       formatters: ["html"],
       source_ref: "v#{@version}",
       nest_modules_by_prefix: [Membrane.Caps]

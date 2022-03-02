@@ -1,7 +1,7 @@
 defmodule Membrane.RawAudio.FormatTest do
   use ExUnit.Case, async: true
 
-  alias Membrane.RawAudio.Format, as: Format
+  alias Membrane.RawAudio.Format
 
   @all_formats [
     :s8,

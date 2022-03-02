@@ -1,6 +1,6 @@
 defmodule Membrane.RawAudioTest do
   use ExUnit.Case, async: true
-  alias Membrane.RawAudio, as: RawAudio
+  alias Membrane.RawAudio
 
   @all_formats [
     :s8,
