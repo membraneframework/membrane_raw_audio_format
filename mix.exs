@@ -24,7 +24,7 @@ defmodule Membrane.RawAudio.Mixfile do
       extras: ["README.md", "LICENSE"],
       formatters: ["html"],
       source_ref: "v#{@version}",
-      nest_modules_by_prefix: [Membrane.Caps]
+      nest_modules_by_prefix: [Membrane.RawAudio]
     ]
   end
 
