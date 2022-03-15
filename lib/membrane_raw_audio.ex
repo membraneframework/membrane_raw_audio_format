@@ -1,7 +1,7 @@
 defmodule Membrane.RawAudio do
   @moduledoc """
-  This module implements struct (`t:#{inspect(__MODULE__)}.t/0`)
-  for caps representing raw audio stream with interleaved channels.
+  This module contains a definition and related functions for struct `t:#{inspect(__MODULE__)}.t/0`,
+  describing a format of raw audio stream with interleaved channels.
   """
 
   alias __MODULE__.SampleFormat
@@ -63,12 +63,12 @@ defmodule Membrane.RawAudio do
   Inlined by the compiler
   """
   @spec frame_size(t) :: integer
-  def frame_size(%__MODULE__{channels: channels} = caps) do
-    sample_size(caps) * channels
+  def frame_size(%__MODULE__{channels: channels} = format) do
+    sample_size(format) * channels
   end
 
   @doc """
-  Determines if sample format is floating point.
+  Determines if the sample values are represented by a floating point number.
 
   Inlined by the compiler.
   """
@@ -81,7 +81,7 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Determines if sample format is integer.
+  Determines if the sample values are represented by an integer.
 
   Inlined by the compiler.
   """
@@ -95,7 +95,7 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Determines if sample format is little endian.
+  Determines if the sample values are represented by a number in little endian byte ordering.
 
   Inlined by the compiler.
   """
@@ -109,7 +109,7 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Determines if sample format is big endian.
+  Determines if the sample values are represented by a number in big endian byte ordering.
 
   Inlined by the compiler.
   """
@@ -123,7 +123,7 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Determines if sample format is signed.
+  Determines if the sample values are represented by a signed number.
 
   Inlined by the compiler.
   """
@@ -137,7 +137,7 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Determines if sample format is unsigned.
+  Determines if the sample values are represented by an unsigned number.
 
   Inlined by the compiler.
   """
@@ -218,9 +218,9 @@ defmodule Membrane.RawAudio do
   Inlined by the compiler.
   """
   @spec value_to_sample_check_overflow(number, t) :: {:ok, binary} | {:error, :overflow}
-  def value_to_sample_check_overflow(value, caps) do
-    if sample_min(caps) <= value and sample_max(caps) >= value do
-      {:ok, value_to_sample(value, caps)}
+  def value_to_sample_check_overflow(value, format) do
+    if sample_min(format) <= value and sample_max(format) >= value do
+      {:ok, value_to_sample(value, format)}
     else
       {:error, :overflow}
     end
@@ -259,7 +259,7 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Returns one 'silent' sample, that is value of zero in given caps' sample format.
+  Returns one 'silent' sample, that is value of zero in given format' sample format.
 
   Inlined by the compiler.
   """
@@ -285,84 +285,84 @@ defmodule Membrane.RawAudio do
 
   @doc """
   Returns a binary which corresponds to the silence during the given interval
-  of time in given caps' sample format
+  of time in given format' sample format
 
   ## Examples:
-  The following code generates the silence for the given caps
+  The following code generates the silence for the given format
 
-      iex> alias Membrane.RawAudio, as: Caps
-      iex> caps = %Caps{sample_rate: 48_000, sample_format: :s16le, channels: 2}
-      iex> silence = Caps.silence(caps, 100 |> Membrane.Time.microseconds)
+      iex> alias Membrane.RawAudio
+      iex> format = %RawAudio{sample_rate: 48_000, sample_format: :s16le, channels: 2}
+      iex> silence = RawAudio.silence(format, 100 |> Membrane.Time.microseconds())
       <<0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>>
   """
   @spec silence(t, Time.non_neg_t(), (float -> integer)) :: binary
-  def silence(%__MODULE__{} = caps, time, round_f \\ &(&1 |> :math.ceil() |> trunc))
+  def silence(%__MODULE__{} = format, time, round_f \\ &(&1 |> :math.ceil() |> trunc))
       when time >= 0 do
-    length = time_to_frames(time, caps, round_f)
-    silence(caps) |> String.duplicate(caps.channels * length)
+    length = time_to_frames(time, format, round_f)
+    silence(format) |> String.duplicate(format.channels * length)
   end
 
   @doc """
-  Converts frames to bytes in given caps.
+  Converts frames to bytes in given format.
 
   Inlined by the compiler.
   """
   @spec frames_to_bytes(non_neg_integer, t) :: non_neg_integer
-  def frames_to_bytes(frames, %__MODULE__{} = caps) when frames >= 0 do
-    frames * frame_size(caps)
+  def frames_to_bytes(frames, %__MODULE__{} = format) when frames >= 0 do
+    frames * frame_size(format)
   end
 
   @doc """
-  Converts bytes to frames in given caps.
+  Converts bytes to frames in given format.
 
   Inlined by the compiler.
   """
   @spec bytes_to_frames(non_neg_integer, t, (float -> integer)) :: non_neg_integer
-  def bytes_to_frames(bytes, %__MODULE__{} = caps, round_f \\ &trunc/1) when bytes >= 0 do
-    (bytes / frame_size(caps)) |> round_f.()
+  def bytes_to_frames(bytes, %__MODULE__{} = format, round_f \\ &trunc/1) when bytes >= 0 do
+    (bytes / frame_size(format)) |> round_f.()
   end
 
   @doc """
-  Converts time in Membrane.Time units to frames in given caps.
+  Converts time in Membrane.Time units to frames in given format.
 
   Inlined by the compiler.
   """
   @spec time_to_frames(Time.non_neg_t(), t, (float -> integer)) :: non_neg_integer
-  def time_to_frames(time, %__MODULE__{} = caps, round_f \\ &(&1 |> :math.ceil() |> trunc))
+  def time_to_frames(time, %__MODULE__{} = format, round_f \\ &(&1 |> :math.ceil() |> trunc))
       when time >= 0 do
-    (time * caps.sample_rate / Time.second()) |> round_f.()
+    (time * format.sample_rate / Time.second()) |> round_f.()
   end
 
   @doc """
-  Converts frames to time in Membrane.Time units in given caps.
+  Converts frames to time in Membrane.Time units in given format.
 
   Inlined by the compiler.
   """
   @spec frames_to_time(non_neg_integer, t, (float -> integer)) :: Time.non_neg_t()
-  def frames_to_time(frames, %__MODULE__{} = caps, round_f \\ &trunc/1)
+  def frames_to_time(frames, %__MODULE__{} = format, round_f \\ &trunc/1)
       when frames >= 0 do
-    (frames * Time.second() / caps.sample_rate) |> round_f.()
+    (frames * Time.second() / format.sample_rate) |> round_f.()
   end
 
   @doc """
-  Converts time in Membrane.Time units to bytes in given caps.
+  Converts time in Membrane.Time units to bytes in given format.
 
   Inlined by the compiler.
   """
   @spec time_to_bytes(Time.non_neg_t(), t, (float -> integer)) :: non_neg_integer
-  def time_to_bytes(time, %__MODULE__{} = caps, round_f \\ &(&1 |> :math.ceil() |> trunc))
+  def time_to_bytes(time, %__MODULE__{} = format, round_f \\ &(&1 |> :math.ceil() |> trunc))
       when time >= 0 do
-    time_to_frames(time, caps, round_f) |> frames_to_bytes(caps)
+    time_to_frames(time, format, round_f) |> frames_to_bytes(format)
   end
 
   @doc """
-  Converts bytes to time in Membrane.Time units in given caps.
+  Converts bytes to time in Membrane.Time units in given format.
 
   Inlined by the compiler.
   """
   @spec bytes_to_time(non_neg_integer, t, (float -> integer)) :: Time.non_neg_t()
-  def bytes_to_time(bytes, %__MODULE__{} = caps, round_f \\ &trunc/1)
+  def bytes_to_time(bytes, %__MODULE__{} = format, round_f \\ &trunc/1)
       when bytes >= 0 do
-    frames_to_time(bytes |> bytes_to_frames(caps), caps, round_f)
+    frames_to_time(bytes |> bytes_to_frames(format), format, round_f)
   end
 end
