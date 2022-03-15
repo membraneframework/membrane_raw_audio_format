@@ -43,9 +43,8 @@ defmodule Membrane.RawAudio do
           sample_format: SampleFormat.t()
         }
 
-  defstruct channels: nil,
-            sample_rate: nil,
-            sample_format: nil
+  @enforce_keys [:channels, :sample_rate, :sample_format]
+  defstruct @enforce_keys
 
   @doc """
   Returns how many bytes are needed to store a single sample.
