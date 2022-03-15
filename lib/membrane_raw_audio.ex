@@ -53,7 +53,7 @@ defmodule Membrane.RawAudio do
   """
   @spec sample_size(t) :: integer
   def sample_size(%__MODULE__{sample_format: format}) do
-    {_, size, _} = SampleFormat.to_tuple(format)
+    {_type, size, _endianness} = SampleFormat.to_tuple(format)
     size |> div(8)
   end
 
@@ -75,8 +75,8 @@ defmodule Membrane.RawAudio do
   @spec sample_type_float?(t) :: boolean
   def sample_type_float?(%__MODULE__{sample_format: format}) do
     case SampleFormat.to_tuple(format) do
-      {:f, _, _} -> true
-      _ -> false
+      {:f, _size, _endianness} -> true
+      _otherwise -> false
     end
   end
 
@@ -88,9 +88,9 @@ defmodule Membrane.RawAudio do
   @spec sample_type_fixed?(t) :: boolean
   def sample_type_fixed?(%__MODULE__{sample_format: format}) do
     case SampleFormat.to_tuple(format) do
-      {:s, _, _} -> true
-      {:u, _, _} -> true
-      _ -> false
+      {:s, _size, _endianness} -> true
+      {:u, _size, _endianness} -> true
+      _otherwise -> false
     end
   end
 
@@ -102,9 +102,9 @@ defmodule Membrane.RawAudio do
   @spec little_endian?(t) :: boolean
   def little_endian?(%__MODULE__{sample_format: format}) do
     case SampleFormat.to_tuple(format) do
-      {_, _, :le} -> true
-      {_, _, :any} -> true
-      _ -> false
+      {_type, _size, :le} -> true
+      {_type, _size, :any} -> true
+      _otherwise -> false
     end
   end
 
@@ -116,9 +116,9 @@ defmodule Membrane.RawAudio do
   @spec big_endian?(t) :: boolean
   def big_endian?(%__MODULE__{sample_format: format}) do
     case SampleFormat.to_tuple(format) do
-      {_, _, :be} -> true
-      {_, _, :any} -> true
-      _ -> false
+      {_type, _size, :be} -> true
+      {_type, _size, :any} -> true
+      _otherwise -> false
     end
   end
 
@@ -130,9 +130,9 @@ defmodule Membrane.RawAudio do
   @spec signed?(t) :: boolean
   def signed?(%__MODULE__{sample_format: format}) do
     case SampleFormat.to_tuple(format) do
-      {:s, _, _} -> true
-      {:f, _, _} -> true
-      _ -> false
+      {:s, _size, _endianness} -> true
+      {:f, _size, _endianness} -> true
+      _otherwise -> false
     end
   end
 
@@ -144,8 +144,8 @@ defmodule Membrane.RawAudio do
   @spec unsigned?(t) :: boolean
   def unsigned?(%__MODULE__{sample_format: format}) do
     case SampleFormat.to_tuple(format) do
-      {:u, _, _} -> true
-      _ -> false
+      {:u, _size, _endianness} -> true
+      _otherwise -> false
     end
   end
 
@@ -236,9 +236,9 @@ defmodule Membrane.RawAudio do
     use Bitwise
 
     case SampleFormat.to_tuple(format) do
-      {:u, _, _} -> 0
-      {:s, size, _} -> -(1 <<< (size - 1))
-      {:f, _, _} -> -1.0
+      {:u, _size, _endianness} -> 0
+      {:s, size, _endianness} -> -(1 <<< (size - 1))
+      {:f, _size, _endianness} -> -1.0
     end
   end
 
@@ -252,9 +252,9 @@ defmodule Membrane.RawAudio do
     use Bitwise
 
     case SampleFormat.to_tuple(format) do
-      {:s, size, _} -> (1 <<< (size - 1)) - 1
-      {:u, size, _} -> (1 <<< size) - 1
-      {:f, _, _} -> 1.0
+      {:s, size, _endianness} -> (1 <<< (size - 1)) - 1
+      {:u, size, _endianness} -> (1 <<< size) - 1
+      {:f, _size, _endianness} -> 1.0
     end
   end
 

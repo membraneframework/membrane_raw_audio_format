@@ -134,8 +134,11 @@ defmodule Membrane.RawAudio.SampleFormat do
 
     endianness =
       case size do
-        8 -> :any
-        _ -> @sample_endiannesses |> BiMap.get_key(serialized_format &&& @sample_endianness)
+        8 ->
+          :any
+
+        _otherwise ->
+          @sample_endiannesses |> BiMap.get_key(serialized_format &&& @sample_endianness)
       end
 
     {type, size, endianness} |> from_tuple
