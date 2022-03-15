@@ -4,8 +4,8 @@ defmodule Membrane.RawAudio.SampleFormat do
   and some helpers to deal with them.
   """
 
-  use Bitwise
   use Bunch.Typespec
+  import Bitwise
 
   @compile {:inline,
             [

@@ -233,7 +233,7 @@ defmodule Membrane.RawAudio do
   """
   @spec sample_min(t) :: number
   def sample_min(%__MODULE__{sample_format: format}) do
-    use Bitwise
+    import Bitwise
 
     case SampleFormat.to_tuple(format) do
       {:u, _size, _endianness} -> 0
@@ -249,7 +249,7 @@ defmodule Membrane.RawAudio do
   """
   @spec sample_max(t) :: number
   def sample_max(%__MODULE__{sample_format: format}) do
-    use Bitwise
+    import Bitwise
 
     case SampleFormat.to_tuple(format) do
       {:s, size, _endianness} -> (1 <<< (size - 1)) - 1
