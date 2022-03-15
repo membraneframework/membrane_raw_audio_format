@@ -2,7 +2,7 @@ defmodule Membrane.RawAudioTest do
   use ExUnit.Case, async: true
   alias Membrane.RawAudio
 
-  @all_formats [
+  @all_sample_formats [
     :s8,
     :u8,
     :s16le,
@@ -23,17 +23,17 @@ defmodule Membrane.RawAudioTest do
     :f64be
   ]
 
-  defp format_to_caps(format) do
-    %RawAudio{format: format, channels: 2, sample_rate: 44_100}
+  defp sample_format_to_caps(format) do
+    %RawAudio{sample_format: format, channels: 2, sample_rate: 44_100}
   end
 
   test "sample_size/1" do
     sizes = [1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 8, 8]
 
-    assert length(@all_formats) == length(sizes)
+    assert length(@all_sample_formats) == length(sizes)
 
-    @all_formats
-    |> Enum.map(&format_to_caps/1)
+    @all_sample_formats
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.zip(sizes)
     |> Enum.each(fn {caps, size} ->
       assert RawAudio.sample_size(caps) == size
@@ -43,17 +43,17 @@ defmodule Membrane.RawAudioTest do
   test "frame_size/1" do
     sizes = [2, 2, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8, 8, 8, 16, 16]
 
-    assert length(@all_formats) == length(sizes)
+    assert length(@all_sample_formats) == length(sizes)
 
-    @all_formats
-    |> Enum.map(&format_to_caps/1)
+    @all_sample_formats
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.zip(sizes)
     |> Enum.each(fn {caps, size} ->
       assert RawAudio.frame_size(caps) == size
     end)
   end
 
-  @float_formats [:f32be, :f32le, :f64le, :f64be]
+  @float_sample_formats [:f32be, :f32le, :f64le, :f64be]
 
   @non_float_caps [
     :s8,
@@ -73,23 +73,23 @@ defmodule Membrane.RawAudioTest do
   ]
 
   test "sample_type_float?" do
-    @float_formats
-    |> Enum.map(&format_to_caps/1)
+    @float_sample_formats
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> assert RawAudio.sample_type_float?(caps) == true end)
 
     @non_float_caps
-    |> Enum.map(&format_to_caps/1)
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> assert RawAudio.sample_type_float?(caps) == false end)
   end
 
-  test "sample_type_int?" do
-    @float_formats
-    |> Enum.map(&format_to_caps/1)
-    |> Enum.each(fn caps -> assert RawAudio.sample_type_int?(caps) == false end)
+  test "sample_type_fixed?" do
+    @float_sample_formats
+    |> Enum.map(&sample_format_to_caps/1)
+    |> Enum.each(fn caps -> assert RawAudio.sample_type_fixed?(caps) == false end)
 
     @non_float_caps
-    |> Enum.map(&format_to_caps/1)
-    |> Enum.each(fn caps -> assert RawAudio.sample_type_int?(caps) == true end)
+    |> Enum.map(&sample_format_to_caps/1)
+    |> Enum.each(fn caps -> assert RawAudio.sample_type_fixed?(caps) == true end)
   end
 
   @little_endian_caps [
@@ -118,33 +118,33 @@ defmodule Membrane.RawAudioTest do
 
   test "little_endian?" do
     @little_endian_caps
-    |> Enum.map(&format_to_caps/1)
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.little_endian?(caps) == true end)
 
     @big_endian_caps
-    |> Enum.map(&format_to_caps/1)
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.little_endian?(caps) == false end)
 
     @one_byte_caps
-    |> Enum.map(&format_to_caps/1)
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.little_endian?(caps) == true end)
   end
 
   test "big_endian?" do
     @little_endian_caps
-    |> Enum.map(&format_to_caps/1)
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.big_endian?(caps) == false end)
 
     @big_endian_caps
-    |> Enum.map(&format_to_caps/1)
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.big_endian?(caps) == true end)
 
     @one_byte_caps
-    |> Enum.map(&format_to_caps/1)
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.big_endian?(caps) == true end)
   end
 
-  @signed_formats [
+  @signed_sample_formats [
     :s8,
     :s16le,
     :s16be,
@@ -154,7 +154,7 @@ defmodule Membrane.RawAudioTest do
     :s32be
   ]
 
-  @unsigned_formats [
+  @unsigned_sample_formats [
     :u8,
     :u16le,
     :u16be,
@@ -165,36 +165,36 @@ defmodule Membrane.RawAudioTest do
   ]
 
   test "signed?" do
-    @signed_formats
-    |> Enum.map(&format_to_caps/1)
+    @signed_sample_formats
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.signed?(caps) == true end)
 
-    @unsigned_formats
-    |> Enum.map(&format_to_caps/1)
+    @unsigned_sample_formats
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.signed?(caps) == false end)
 
-    @float_formats
-    |> Enum.map(&format_to_caps/1)
+    @float_sample_formats
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.signed?(caps) == true end)
   end
 
   test "unsigned?/1" do
-    @signed_formats
-    |> Enum.map(&format_to_caps/1)
+    @signed_sample_formats
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.unsigned?(caps) == false end)
 
-    @unsigned_formats
-    |> Enum.map(&format_to_caps/1)
+    @unsigned_sample_formats
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.unsigned?(caps) == true end)
 
-    @float_formats
-    |> Enum.map(&format_to_caps/1)
+    @float_sample_formats
+    |> Enum.map(&sample_format_to_caps/1)
     |> Enum.each(fn caps -> RawAudio.unsigned?(caps) == false end)
   end
 
   @example_value 42
   defp assert_value_to_sample(format, result) do
-    assert RawAudio.value_to_sample(@example_value, format_to_caps(format)) == result
+    assert RawAudio.value_to_sample(@example_value, sample_format_to_caps(format)) == result
   end
 
   test "value_to_sample/2" do
@@ -218,7 +218,7 @@ defmodule Membrane.RawAudioTest do
   end
 
   defp assert_value_to_sample_check_overflow_ok(format, result) do
-    assert RawAudio.value_to_sample_check_overflow(@example_value, format_to_caps(format)) ==
+    assert RawAudio.value_to_sample_check_overflow(@example_value, sample_format_to_caps(format)) ==
              {:ok, result}
   end
 
@@ -243,7 +243,7 @@ defmodule Membrane.RawAudioTest do
   end
 
   defp assert_value_to_sample_check_overflow_error(value, format) do
-    assert RawAudio.value_to_sample_check_overflow(value, format_to_caps(format)) ==
+    assert RawAudio.value_to_sample_check_overflow(value, sample_format_to_caps(format)) ==
              {:error, :overflow}
   end
 
@@ -270,7 +270,7 @@ defmodule Membrane.RawAudioTest do
   end
 
   defp assert_sample_to_value_ok(sample, format, value) do
-    RawAudio.sample_to_value(sample, format |> format_to_caps) == {:ok, value}
+    RawAudio.sample_to_value(sample, format |> sample_format_to_caps) == {:ok, value}
   end
 
   test "sample_to_value/2" do
@@ -318,7 +318,7 @@ defmodule Membrane.RawAudioTest do
       {:f64be, -1.0}
     ]
     |> Enum.each(fn {format, min_sample} ->
-      assert RawAudio.sample_min(format |> format_to_caps()) == min_sample
+      assert RawAudio.sample_min(format |> sample_format_to_caps()) == min_sample
     end)
   end
 
@@ -340,7 +340,7 @@ defmodule Membrane.RawAudioTest do
       {:f64be, 1.0}
     ]
     |> Enum.each(fn {format, max_sample} ->
-      assert RawAudio.sample_max(format |> format_to_caps()) == max_sample
+      assert RawAudio.sample_max(format |> sample_format_to_caps()) == max_sample
     end)
   end
 end

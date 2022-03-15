@@ -1,6 +1,6 @@
-defmodule Membrane.RawAudio.Format do
+defmodule Membrane.RawAudio.SampleFormat do
   @moduledoc """
-  This module defines formats used in `Membrane.RawAudio`
+  This module defines sample formats used in `Membrane.RawAudio`
   and some helpers to deal with them.
   """
 

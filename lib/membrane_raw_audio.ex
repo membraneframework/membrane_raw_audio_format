@@ -4,7 +4,7 @@ defmodule Membrane.RawAudio do
   for caps representing raw audio stream with interleaved channels.
   """
 
-  alias __MODULE__.Format
+  alias __MODULE__.SampleFormat
   alias Membrane.Time
 
   @compile {:inline,
@@ -12,7 +12,7 @@ defmodule Membrane.RawAudio do
               sample_size: 1,
               frame_size: 1,
               sample_type_float?: 1,
-              sample_type_int?: 1,
+              sample_type_fixed?: 1,
               big_endian?: 1,
               little_endian?: 1,
               signed?: 1,
@@ -22,7 +22,7 @@ defmodule Membrane.RawAudio do
               value_to_sample_check_overflow: 2,
               sample_min: 1,
               sample_max: 1,
-              sound_of_silence: 1,
+              silence: 1,
               frames_to_bytes: 2,
               bytes_to_frames: 3,
               frames_to_time: 3,
@@ -40,12 +40,12 @@ defmodule Membrane.RawAudio do
   @type t :: %Membrane.RawAudio{
           channels: channels_t,
           sample_rate: sample_rate_t,
-          format: Format.t()
+          sample_format: SampleFormat.t()
         }
 
   defstruct channels: nil,
             sample_rate: nil,
-            format: nil
+            sample_format: nil
 
   @doc """
   Returns how many bytes are needed to store a single sample.
@@ -53,8 +53,8 @@ defmodule Membrane.RawAudio do
   Inlined by the compiler
   """
   @spec sample_size(t) :: integer
-  def sample_size(%__MODULE__{format: format}) do
-    {_, size, _} = Format.to_tuple(format)
+  def sample_size(%__MODULE__{sample_format: format}) do
+    {_, size, _} = SampleFormat.to_tuple(format)
     size |> div(8)
   end
 
@@ -69,26 +69,26 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Determines if format is floating point.
+  Determines if sample format is floating point.
 
   Inlined by the compiler.
   """
   @spec sample_type_float?(t) :: boolean
-  def sample_type_float?(%__MODULE__{format: format}) do
-    case Format.to_tuple(format) do
+  def sample_type_float?(%__MODULE__{sample_format: format}) do
+    case SampleFormat.to_tuple(format) do
       {:f, _, _} -> true
       _ -> false
     end
   end
 
   @doc """
-  Determines if format is integer.
+  Determines if sample format is integer.
 
   Inlined by the compiler.
   """
-  @spec sample_type_int?(t) :: boolean
-  def sample_type_int?(%__MODULE__{format: format}) do
-    case Format.to_tuple(format) do
+  @spec sample_type_fixed?(t) :: boolean
+  def sample_type_fixed?(%__MODULE__{sample_format: format}) do
+    case SampleFormat.to_tuple(format) do
       {:s, _, _} -> true
       {:u, _, _} -> true
       _ -> false
@@ -96,13 +96,13 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Determines if format is little endian.
+  Determines if sample format is little endian.
 
   Inlined by the compiler.
   """
   @spec little_endian?(t) :: boolean
-  def little_endian?(%__MODULE__{format: format}) do
-    case Format.to_tuple(format) do
+  def little_endian?(%__MODULE__{sample_format: format}) do
+    case SampleFormat.to_tuple(format) do
       {_, _, :le} -> true
       {_, _, :any} -> true
       _ -> false
@@ -110,13 +110,13 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Determines if format is big endian.
+  Determines if sample format is big endian.
 
   Inlined by the compiler.
   """
   @spec big_endian?(t) :: boolean
-  def big_endian?(%__MODULE__{format: format}) do
-    case Format.to_tuple(format) do
+  def big_endian?(%__MODULE__{sample_format: format}) do
+    case SampleFormat.to_tuple(format) do
       {_, _, :be} -> true
       {_, _, :any} -> true
       _ -> false
@@ -124,13 +124,13 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Determines if format is signed.
+  Determines if sample format is signed.
 
   Inlined by the compiler.
   """
   @spec signed?(t) :: boolean
-  def signed?(%__MODULE__{format: format}) do
-    case Format.to_tuple(format) do
+  def signed?(%__MODULE__{sample_format: format}) do
+    case SampleFormat.to_tuple(format) do
       {:s, _, _} -> true
       {:f, _, _} -> true
       _ -> false
@@ -138,26 +138,26 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Determines if format is unsigned.
+  Determines if sample format is unsigned.
 
   Inlined by the compiler.
   """
   @spec unsigned?(t) :: boolean
-  def unsigned?(%__MODULE__{format: format}) do
-    case Format.to_tuple(format) do
+  def unsigned?(%__MODULE__{sample_format: format}) do
+    case SampleFormat.to_tuple(format) do
       {:u, _, _} -> true
       _ -> false
     end
   end
 
   @doc """
-  Converts one raw sample into its numeric value, interpreting it for given format.
+  Converts one raw sample into its numeric value, interpreting it for given sample format.
 
   Inlined by the compiler.
   """
   @spec sample_to_value(bitstring, t) :: number
-  def sample_to_value(sample, %__MODULE__{format: format}) do
-    case Format.to_tuple(format) do
+  def sample_to_value(sample, %__MODULE__{sample_format: format}) do
+    case SampleFormat.to_tuple(format) do
       {:s, size, endianness} when endianness in [:le, :any] ->
         <<value::integer-size(size)-little-signed>> = sample
         value
@@ -185,13 +185,13 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Converts value into one raw sample, encoding it in given format.
+  Converts value into one raw sample, encoding it with the given sample format.
 
   Inlined by the compiler.
   """
   @spec value_to_sample(number, t) :: binary
-  def value_to_sample(value, %__MODULE__{format: format}) do
-    case Format.to_tuple(format) do
+  def value_to_sample(value, %__MODULE__{sample_format: format}) do
+    case SampleFormat.to_tuple(format) do
       {:s, size, endianness} when endianness in [:le, :any] ->
         <<value::integer-size(size)-little-signed>>
 
@@ -228,15 +228,15 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Returns minimum sample value for given format.
+  Returns minimum sample value for given sample format.
 
   Inlined by the compiler.
   """
   @spec sample_min(t) :: number
-  def sample_min(%__MODULE__{format: format}) do
+  def sample_min(%__MODULE__{sample_format: format}) do
     use Bitwise
 
-    case Format.to_tuple(format) do
+    case SampleFormat.to_tuple(format) do
       {:u, _, _} -> 0
       {:s, size, _} -> -(1 <<< (size - 1))
       {:f, _, _} -> -1.0
@@ -244,15 +244,15 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Returns maximum sample value for given format.
+  Returns maximum sample value for given sample format.
 
   Inlined by the compiler.
   """
   @spec sample_max(t) :: number
-  def sample_max(%__MODULE__{format: format}) do
+  def sample_max(%__MODULE__{sample_format: format}) do
     use Bitwise
 
-    case Format.to_tuple(format) do
+    case SampleFormat.to_tuple(format) do
       {:s, size, _} -> (1 <<< (size - 1)) - 1
       {:u, size, _} -> (1 <<< size) - 1
       {:f, _, _} -> 1.0
@@ -260,47 +260,47 @@ defmodule Membrane.RawAudio do
   end
 
   @doc """
-  Returns one 'silent' sample, that is value of zero in given caps' format.
+  Returns one 'silent' sample, that is value of zero in given caps' sample format.
 
   Inlined by the compiler.
   """
-  @spec sound_of_silence(t) :: binary
-  def sound_of_silence(%__MODULE__{format: :s8}), do: <<0>>
-  def sound_of_silence(%__MODULE__{format: :u8}), do: <<128>>
-  def sound_of_silence(%__MODULE__{format: :s16le}), do: <<0, 0>>
-  def sound_of_silence(%__MODULE__{format: :u16le}), do: <<0, 128>>
-  def sound_of_silence(%__MODULE__{format: :s16be}), do: <<0, 0>>
-  def sound_of_silence(%__MODULE__{format: :u16be}), do: <<128, 0>>
-  def sound_of_silence(%__MODULE__{format: :s24le}), do: <<0, 0, 0>>
-  def sound_of_silence(%__MODULE__{format: :u24le}), do: <<0, 0, 128>>
-  def sound_of_silence(%__MODULE__{format: :s24be}), do: <<0, 0, 0>>
-  def sound_of_silence(%__MODULE__{format: :u24be}), do: <<128, 0, 0>>
-  def sound_of_silence(%__MODULE__{format: :s32le}), do: <<0, 0, 0, 0>>
-  def sound_of_silence(%__MODULE__{format: :u32le}), do: <<0, 0, 0, 128>>
-  def sound_of_silence(%__MODULE__{format: :s32be}), do: <<0, 0, 0, 0>>
-  def sound_of_silence(%__MODULE__{format: :u32be}), do: <<128, 0, 0, 0>>
-  def sound_of_silence(%__MODULE__{format: :f32le}), do: <<0, 0, 0, 0>>
-  def sound_of_silence(%__MODULE__{format: :f32be}), do: <<0, 0, 0, 0>>
-  def sound_of_silence(%__MODULE__{format: :f64le}), do: <<0, 0, 0, 0, 0, 0, 0, 0>>
-  def sound_of_silence(%__MODULE__{format: :f64be}), do: <<0, 0, 0, 0, 0, 0, 0, 0>>
+  @spec silence(t) :: binary
+  def silence(%__MODULE__{sample_format: :s8}), do: <<0>>
+  def silence(%__MODULE__{sample_format: :u8}), do: <<128>>
+  def silence(%__MODULE__{sample_format: :s16le}), do: <<0, 0>>
+  def silence(%__MODULE__{sample_format: :u16le}), do: <<0, 128>>
+  def silence(%__MODULE__{sample_format: :s16be}), do: <<0, 0>>
+  def silence(%__MODULE__{sample_format: :u16be}), do: <<128, 0>>
+  def silence(%__MODULE__{sample_format: :s24le}), do: <<0, 0, 0>>
+  def silence(%__MODULE__{sample_format: :u24le}), do: <<0, 0, 128>>
+  def silence(%__MODULE__{sample_format: :s24be}), do: <<0, 0, 0>>
+  def silence(%__MODULE__{sample_format: :u24be}), do: <<128, 0, 0>>
+  def silence(%__MODULE__{sample_format: :s32le}), do: <<0, 0, 0, 0>>
+  def silence(%__MODULE__{sample_format: :u32le}), do: <<0, 0, 0, 128>>
+  def silence(%__MODULE__{sample_format: :s32be}), do: <<0, 0, 0, 0>>
+  def silence(%__MODULE__{sample_format: :u32be}), do: <<128, 0, 0, 0>>
+  def silence(%__MODULE__{sample_format: :f32le}), do: <<0, 0, 0, 0>>
+  def silence(%__MODULE__{sample_format: :f32be}), do: <<0, 0, 0, 0>>
+  def silence(%__MODULE__{sample_format: :f64le}), do: <<0, 0, 0, 0, 0, 0, 0, 0>>
+  def silence(%__MODULE__{sample_format: :f64be}), do: <<0, 0, 0, 0, 0, 0, 0, 0>>
 
   @doc """
   Returns a binary which corresponds to the silence during the given interval
-  of time in given caps' fromat
+  of time in given caps' sample format
 
   ## Examples:
   The following code generates the silence for the given caps
 
       iex> alias Membrane.RawAudio, as: Caps
-      iex> caps = %Caps{sample_rate: 48_000, format: :s16le, channels: 2}
-      iex> silence = Caps.sound_of_silence(caps, 100 |> Membrane.Time.microseconds)
+      iex> caps = %Caps{sample_rate: 48_000, sample_format: :s16le, channels: 2}
+      iex> silence = Caps.silence(caps, 100 |> Membrane.Time.microseconds)
       <<0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>>
   """
-  @spec sound_of_silence(t, Time.non_neg_t(), (float -> integer)) :: binary
-  def sound_of_silence(%__MODULE__{} = caps, time, round_f \\ &(&1 |> :math.ceil() |> trunc))
+  @spec silence(t, Time.non_neg_t(), (float -> integer)) :: binary
+  def silence(%__MODULE__{} = caps, time, round_f \\ &(&1 |> :math.ceil() |> trunc))
       when time >= 0 do
     length = time_to_frames(time, caps, round_f)
-    caps |> sound_of_silence |> String.duplicate(caps.channels * length)
+    silence(caps) |> String.duplicate(caps.channels * length)
   end
 
   @doc """
