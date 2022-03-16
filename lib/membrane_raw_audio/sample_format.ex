@@ -1,11 +1,11 @@
-defmodule Membrane.RawAudio.Format do
+defmodule Membrane.RawAudio.SampleFormat do
   @moduledoc """
-  This module defines formats used in `Membrane.RawAudio`
+  This module defines sample formats used in `Membrane.RawAudio`
   and some helpers to deal with them.
   """
 
-  use Bitwise
   use Bunch.Typespec
+  import Bitwise
 
   @compile {:inline,
             [
@@ -90,10 +90,10 @@ defmodule Membrane.RawAudio.Format do
   # Serialization constants
 
   @sample_types BiMap.new(s: 0b01 <<< 30, u: 0b00 <<< 30, f: 0b11 <<< 30)
-  @sample_endiannesses BiMap.new(le: 0b0 <<< 29, be: 0b1 <<< 29)
+  @endianness_mapping BiMap.new(le: 0b0 <<< 29, be: 0b1 <<< 29)
 
   @sample_type 0b11 <<< 30
-  @sample_endianness 0b1 <<< 29
+  @endianness_bitmask 0b1 <<< 29
   @sample_size (0b1 <<< 8) - 1
 
   @doc """
@@ -112,7 +112,7 @@ defmodule Membrane.RawAudio.Format do
   def serialize(format) do
     {type, size, endianness} = format |> to_tuple
 
-    0 ||| @sample_types[type] ||| (@sample_endiannesses[endianness] || @sample_endiannesses[:le]) |||
+    0 ||| @sample_types[type] ||| (@endianness_mapping[endianness] || @endianness_mapping[:le]) |||
       size
   end
 
@@ -134,8 +134,11 @@ defmodule Membrane.RawAudio.Format do
 
     endianness =
       case size do
-        8 -> :any
-        _ -> @sample_endiannesses |> BiMap.get_key(serialized_format &&& @sample_endianness)
+        8 ->
+          :any
+
+        _otherwise ->
+          @endianness_mapping |> BiMap.get_key(serialized_format &&& @endianness_bitmask)
       end
 
     {type, size, endianness} |> from_tuple

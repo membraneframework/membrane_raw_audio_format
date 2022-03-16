@@ -5,8 +5,7 @@
 [![CircleCI](https://circleci.com/gh/membraneframework/membrane_raw_audio_format/tree/master.svg?style=svg)](https://circleci.com/gh/membraneframework/membrane_raw_audio_format/tree/master)
 
 
-This package provides raw audio format definition (so-called caps) for the
-[Membrane Multimedia Framework](https://membraneframework.org).
+This package provides raw audio format definition for the [Membrane Multimedia Framework](https://membraneframework.org).
 
 Beyond general data structures it contains some useful helper functions for
 manipulating raw audio samples.
