@@ -13,26 +13,27 @@ defmodule Membrane.RawAudio.SampleFormat do
               from_tuple: 1
             ]}
 
-  @list_type t :: [
-               :s8,
-               :u8,
-               :s16le,
-               :u16le,
-               :s16be,
-               :u16be,
-               :s24le,
-               :u24le,
-               :s24be,
-               :u24be,
-               :s32le,
-               :u32le,
-               :s32be,
-               :u32be,
-               :f32le,
-               :f32be,
-               :f64le,
-               :f64be
-             ]
+  @t [
+    :s8,
+    :u8,
+    :s16le,
+    :u16le,
+    :s16be,
+    :u16be,
+    :s24le,
+    :u24le,
+    :s24be,
+    :u24be,
+    :s32le,
+    :u32le,
+    :s32be,
+    :u32be,
+    :f32le,
+    :f32be,
+    :f64le,
+    :f64be
+  ]
+  @type t :: unquote(Bunch.Typespec.enum_to_alternative(@t))
 
   @spec values() :: [t()]
   def values(), do: @t
