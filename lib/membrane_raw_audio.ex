@@ -295,7 +295,7 @@ defmodule Membrane.RawAudio do
       iex> silence = RawAudio.silence(format, 100 |> Membrane.Time.microseconds())
       <<0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>>
   """
-  @spec silence(t, Time.non_neg_t(), (float -> integer)) :: binary
+  @spec silence(t, Time.non_neg(), (float -> integer)) :: binary
   def silence(%__MODULE__{} = format, time, round_f \\ &(&1 |> :math.ceil() |> trunc))
       when time >= 0 do
     length = time_to_frames(time, format, round_f)
@@ -327,7 +327,7 @@ defmodule Membrane.RawAudio do
 
   Inlined by the compiler.
   """
-  @spec time_to_frames(Time.non_neg_t(), t, (float -> integer)) :: non_neg_integer
+  @spec time_to_frames(Time.non_neg(), t, (float -> integer)) :: non_neg_integer
   def time_to_frames(time, %__MODULE__{} = format, round_f \\ &(&1 |> :math.ceil() |> trunc))
       when time >= 0 do
     (time * format.sample_rate / Time.second()) |> round_f.()
@@ -338,7 +338,7 @@ defmodule Membrane.RawAudio do
 
   Inlined by the compiler.
   """
-  @spec frames_to_time(non_neg_integer, t, (float -> integer)) :: Time.non_neg_t()
+  @spec frames_to_time(non_neg_integer, t, (float -> integer)) :: Time.non_neg()
   def frames_to_time(frames, %__MODULE__{} = format, round_f \\ &trunc/1)
       when frames >= 0 do
     (frames * Time.second() / format.sample_rate) |> round_f.()
@@ -349,7 +349,7 @@ defmodule Membrane.RawAudio do
 
   Inlined by the compiler.
   """
-  @spec time_to_bytes(Time.non_neg_t(), t, (float -> integer)) :: non_neg_integer
+  @spec time_to_bytes(Time.non_neg(), t, (float -> integer)) :: non_neg_integer
   def time_to_bytes(time, %__MODULE__{} = format, round_f \\ &(&1 |> :math.ceil() |> trunc))
       when time >= 0 do
     time_to_frames(time, format, round_f) |> frames_to_bytes(format)
@@ -360,7 +360,7 @@ defmodule Membrane.RawAudio do
 
   Inlined by the compiler.
   """
-  @spec bytes_to_time(non_neg_integer, t, (float -> integer)) :: Time.non_neg_t()
+  @spec bytes_to_time(non_neg_integer, t, (float -> integer)) :: Time.non_neg()
   def bytes_to_time(bytes, %__MODULE__{} = format, round_f \\ &trunc/1)
       when bytes >= 0 do
     frames_to_time(bytes |> bytes_to_frames(format), format, round_f)
