@@ -1,7 +1,7 @@
 defmodule Membrane.RawAudio.Mixfile do
   use Mix.Project
 
-  @version "0.10.0"
+  @version "0.11.0"
   @github_link "https://github.com/membraneframework/membrane_raw_audio_format"
 
   def project do
@@ -42,7 +42,7 @@ defmodule Membrane.RawAudio.Mixfile do
 
   defp deps do
     [
-      {:membrane_core, "~> 0.11"},
+      {:membrane_core, "~> 0.12.0"},
       {:bimap, "~> 1.1"},
       {:bunch, "~> 1.0"},
       {:ex_doc, "~> 0.28", only: :dev, runtime: false},
