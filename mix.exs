@@ -15,7 +15,8 @@ defmodule Membrane.RawAudio.Mixfile do
       source_url: @github_link,
       docs: docs(),
       deps: deps(),
-      dialyzer: dialyzer()
+      dialyzer: dialyzer(),
+      homepage_url: "https://membrane.stream"
     ]
   end
 
