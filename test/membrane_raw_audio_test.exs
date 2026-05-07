@@ -75,7 +75,9 @@ defmodule Membrane.RawAudioTest do
   test "sample_type_float?" do
     @float_sample_formats
     |> Enum.map(&to_raw_audio_format/1)
-    |> Enum.each(fn sample_format -> assert RawAudio.sample_type_float?(sample_format) == true end)
+    |> Enum.each(fn sample_format ->
+      assert RawAudio.sample_type_float?(sample_format) == true
+    end)
 
     @non_float_formats
     |> Enum.map(&to_raw_audio_format/1)
@@ -93,7 +95,9 @@ defmodule Membrane.RawAudioTest do
 
     @non_float_formats
     |> Enum.map(&to_raw_audio_format/1)
-    |> Enum.each(fn sample_format -> assert RawAudio.sample_type_fixed?(sample_format) == true end)
+    |> Enum.each(fn sample_format ->
+      assert RawAudio.sample_type_fixed?(sample_format) == true
+    end)
   end
 
   @little_endian_sample_formats [
@@ -281,7 +285,7 @@ defmodule Membrane.RawAudioTest do
   end
 
   defp assert_sample_to_value_ok(sample, sample_format, value) do
-    RawAudio.sample_to_value(sample, sample_format |> to_raw_audio_format()) == {:ok, value}
+    assert RawAudio.sample_to_value(sample, sample_format |> to_raw_audio_format()) == value
   end
 
   test "sample_to_value/2" do

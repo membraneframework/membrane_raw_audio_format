@@ -1,7 +1,7 @@
 defmodule Membrane.RawAudio.Mixfile do
   use Mix.Project
 
-  @version "0.12.0"
+  @version "0.12.1"
   @github_link "https://github.com/membraneframework/membrane_raw_audio_format"
 
   def project do
@@ -46,19 +46,21 @@ defmodule Membrane.RawAudio.Mixfile do
       {:membrane_core, "~> 1.0"},
       {:bimap, "~> 1.1"},
       {:bunch, "~> 1.0"},
-      {:ex_doc, "~> 0.28", only: :dev, runtime: false},
-      {:credo, "~> 1.6", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.1", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.34", only: :dev, runtime: false},
+      {:credo, "~> 1.7", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.4", only: :dev, runtime: false}
     ]
   end
 
   defp dialyzer() do
     opts = [
-      flags: [:error_handling]
+      flags: [:error_handling],
+      plt_add_apps: [:mix, :syntax_tools]
     ]
 
     if System.get_env("CI") == "true" do
       # Store PLTs in cacheable directory for CI
+      File.mkdir_p!(Path.join([__DIR__, "priv", "plts"]))
       [plt_local_path: "priv/plts", plt_core_path: "priv/plts"] ++ opts
     else
       opts
