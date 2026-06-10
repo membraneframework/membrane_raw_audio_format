@@ -158,27 +158,27 @@ defmodule Membrane.RawAudio do
   def sample_to_value(sample, %__MODULE__{sample_format: format}) do
     case SampleFormat.to_tuple(format) do
       {:s, size, endianness} when endianness in [:le, :any] ->
-        <<value::integer-size(size)-little-signed>> = sample
+        <<value::integer-size(^size)-little-signed>> = sample
         value
 
       {:u, size, endianness} when endianness in [:le, :any] ->
-        <<value::integer-size(size)-little-unsigned>> = sample
+        <<value::integer-size(^size)-little-unsigned>> = sample
         value
 
       {:s, size, :be} ->
-        <<value::integer-size(size)-big-signed>> = sample
+        <<value::integer-size(^size)-big-signed>> = sample
         value
 
       {:u, size, :be} ->
-        <<value::integer-size(size)-big-unsigned>> = sample
+        <<value::integer-size(^size)-big-unsigned>> = sample
         value
 
       {:f, size, :le} ->
-        <<value::float-size(size)-little>> = sample
+        <<value::float-size(^size)-little>> = sample
         value
 
       {:f, size, :be} ->
-        <<value::float-size(size)-big>> = sample
+        <<value::float-size(^size)-big>> = sample
         value
     end
   end
