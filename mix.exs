@@ -1,7 +1,7 @@
 defmodule Membrane.RawAudio.Mixfile do
   use Mix.Project
 
-  @version "0.12.1"
+  @version "0.12.2"
   @github_link "https://github.com/membraneframework/membrane_raw_audio_format"
 
   def project do
